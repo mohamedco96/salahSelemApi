@@ -15,16 +15,19 @@ class UserController extends Controller
     public function auth(Request $request)
     {
         $loginData = $request->validate([
-            'email' => 'required',
+            'email' => 'email|required',
             'password' => 'required',
         ]);
 
         if (!auth()->attempt($loginData)) {
+            // register();
             $loginData['password'] = bcrypt($request->password);
             $user = User::create($loginData);
             $accessToken = $user->createToken('authToken')->accessToken;
+
             return response(['user' => $user, 'access_token' => $accessToken]);
             return response(['message' => 'new user created']);
+            // return response(['message' => 'Invalid Credentials']);
         }
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;

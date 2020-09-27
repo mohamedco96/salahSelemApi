@@ -26,10 +26,8 @@ class VideoController extends Controller
         // ->get();
 
         $vid = QueryBuilder::for(Video::class)
-        ->allowedFilters(['catagory', 'type', 'video_Name'])
-        ->paginate()
-        ->appends(request()->query());
-        
+        ->allowedFilters(['catagory', 'type'])
+        ->get();
         // $vid = Video::all();
         return VideoResource::collection($vid);
     }
