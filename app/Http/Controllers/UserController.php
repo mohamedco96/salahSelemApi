@@ -50,7 +50,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
+        $data['password'] = bcrypt($request->password);
         $validator = Validator::make($data, [
             'email' => 'required|max:255',
             'password' => 'required|max:255',
