@@ -9,11 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class VideoController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      *
@@ -25,13 +24,22 @@ class VideoController extends Controller
         // ->allowedFilters('catagory')
         // ->get();
 
-        $vid = QueryBuilder::for(Video::class)
+        // $vid = QueryBuilder::for(Video::class)
         
-        ->allowedFilters(['catagory', 'type', 'video_Name'])
+        // ->allowedFilters(['catagory', 'type', 'video_Name'])
+        // ->paginate()
+        // ->appends(request()->query());
+        
+
+        $vid = QueryBuilder::for(Video::class)
+        ->allowedFilters([
+            'video_Name',
+            AllowedFilter::exact('catagory'),
+            AllowedFilter::exact('type'),
+        ])
         ->paginate()
         ->appends(request()->query());
         
-        // $vid = Video::all();
         return VideoResource::collection($vid);
     }
 
@@ -43,21 +51,26 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        $vid = new Video;
-        $vid->video_Name = $request->input('video_Name');
-        $vid->catagory_id = $request->input('catagory_id');
-        $vid->video_thumbnail = $request->input('video_thumbnail');
-        $vid->video_Description = $request->input('video_Description');
-        $vid->video_Type = $request->input('video_Type');
-        $vid->video_Link = $request->input('video_Link');
-        $vid->video_Duration = $request->input('video_Duration');
-        $vid->video_Quote = $request->input('video_Quote');
-        $vid->video_Reps = $request->input('video_Reps');
-        $vid->video_Sets = $request->input('video_Sets');
-        $vid->save();
-        // return new VideoResource($vid);
-        return response([ 'Video' => new VideoResource($vid), 'message' => 'Created Video successfully'], 200);
+        $data = $request->all();
 
+        $validator = Validator::make($data, [
+            'video_Name' => 'required|max:255',
+            'catagory' => 'required|max:255',
+            'type' => 'required|max:255',
+            'video_thumbnail' => 'required|max:255',
+            'video_Link' => 'required|max:255',
+            'video_Description' => 'max:255',
+            'video_Quote' => 'max:255',
+            'video_Reps' => 'max:255',
+            'video_Sets' => 'max:255',
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+        $vid = Video::create($data);
+
+        return response([ 'Video' => new VideoResource($vid), 'message' => 'Created Video successfully'], 200);
     }
 
     /**
@@ -68,11 +81,11 @@ class VideoController extends Controller
      */
     public function show($id)
     {
-        $Video = Video::find($id); //id comes from route
+        $Video = Video::find($id); 
         if ($Video) {
             return new VideoResource($Video);
         }
-        return "Video Not found"; // temporary error
+        return "Video Not found"; 
     }
 
     /**
@@ -88,6 +101,30 @@ class VideoController extends Controller
         $vid->update($request->all());
         return response(['Video' => new VideoResource($vid), 'message' => 'Update Video successfully'], 200);
         // return new VideoResource($vid);
+
+
+        // $vid = Video::find($id);
+        // $data = $request->all();
+
+        // $validator = Validator::make($data, [
+        //     'video_Name' => 'required|max:255',
+        //     'catagory' => 'required|max:255',
+        //     'type' => 'required|max:255',
+        //     'video_thumbnail' => 'required|max:255',
+        //     'video_Link' => 'required|max:255',
+        //     'video_Description' => 'max:255',
+        //     'video_Quote' => 'max:255',
+        //     'video_Reps' => 'max:255',
+        //     'video_Sets' => 'max:255',
+        // ]);
+
+        // if($validator->fails()){
+        //     return response(['error' => $validator->errors(), 'Validation Error']);
+        // }
+        // $vid->update($data);
+        // $vid = Video::create($data);
+
+        // return response([ 'Video' => new VideoResource($vid), 'message' => 'Update Video successfully'], 200);
     }
 
     /**

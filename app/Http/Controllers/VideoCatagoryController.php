@@ -8,6 +8,9 @@ use App\Http\Resources\VideoCatagoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
+
 class VideoCatagoryController extends Controller
 {
 
@@ -19,7 +22,14 @@ class VideoCatagoryController extends Controller
      */
     public function index()
     {
-        $vid = VideoCatagory::all();
+        
+        $vid = QueryBuilder::for(VideoCatagory::class)
+        ->allowedFilters([
+            AllowedFilter::exact('name'),
+        ])
+        ->paginate()
+        ->appends(request()->query());
+        
         return VideoCatagoryResource::collection($vid);
     }
 
@@ -31,13 +41,19 @@ class VideoCatagoryController extends Controller
      */
     public function store(Request $request)
     {
-        $vid = new VideoCatagory;
-        $vid->name = $request->input('name');
-        $vid->description = $request->input('description');
-        $vid->save();
-        // return new VideoCatagoryResource($vid);
-        return response([ 'VideoCatagory' => new VideoCatagoryResource($vid), 'message' => 'Created VideoCatagory successfully'], 200);
+        $data = $request->all();
 
+        $validator = Validator::make($data, [
+            'name' => 'required|max:255',
+            'description' => 'max:255',
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+        $vid = VideoCatagory::create($data);
+
+        return response([ 'VideoCatagory' => new VideoCatagoryResource($vid), 'message' => 'Created Video Catagory successfully'], 200);
     }
 
     /**
@@ -48,11 +64,11 @@ class VideoCatagoryController extends Controller
      */
     public function show($id)
     {
-        $VideoCatagory = VideoCatagory::find($id); //id comes from route
+        $VideoCatagory = VideoCatagory::find($id);
         if ($VideoCatagory) {
             return new VideoCatagoryResource($VideoCatagory);
         }
-        return "VideoCatagory Not found"; // temporary error
+        return "VideoCatagory Not found"; 
     }
 
     /**
@@ -67,7 +83,6 @@ class VideoCatagoryController extends Controller
         $vid = VideoCatagory::find($id);
         $vid->update($request->all());
         return response(['VideoCatagory' => new VideoCatagoryResource($vid), 'message' => 'Update VideoCatagory successfully'], 200);
-        // return new VideoCatagoryResource($vid);
     }
 
     /**
@@ -81,7 +96,6 @@ class VideoCatagoryController extends Controller
         $vid = VideoCatagory::findOrfail($id);
         if ($vid->delete()) {
             return response(['message' => 'VideoCatagory Deleted successfully']);
-            // return new VideoCatagoryResource($vid);
         }
         return "Error while deleting";
     }

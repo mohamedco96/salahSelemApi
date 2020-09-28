@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class UserController extends Controller
 {
@@ -50,6 +52,7 @@ class UserController extends Controller
         $validator = Validator::make($data, [
             'email' => 'required|max:255',
             'password' => 'required|max:255',
+            'role_id' => 'max:255',
             'avatar' => 'max:255',
             'fname' => 'max:255',
             'lname' => 'max:255',
@@ -86,24 +89,44 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::paginate(3);
+        $user = QueryBuilder::for(User::class)
+        ->allowedFilters([
+            'fname',
+            'lname',
+            'age',
+            AllowedFilter::exact('email'),
+            AllowedFilter::exact('role_id'),
+            AllowedFilter::exact('online'),
+            AllowedFilter::exact('gender'),
+
+        ])
+        ->paginate()
+        ->appends(request()->query());
+        
+        return ApiResource::collection($user);
+
+
+        // $user = User::paginate(3);
         
     // return view('products.index-paging')->with('products', $products);
 
         // $user = User::all();
-        return response(['user' => ApiResource::collection($user), 'message' => 'Retrieved All Users successfully'], 200);
+        // return response(['user' => ApiResource::collection($user), 'message' => 'Retrieved All successfully'], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $User
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return response(['user' => new ApiResource($user), 'message' => 'Retrieved User successfully'], 200);
-
+        $user = User::find($id); 
+        if ($user) {
+            return new ApiResource($user);
+        }
+        return "user Not found"; 
     }
 
     /**
@@ -121,18 +144,20 @@ class UserController extends Controller
         return response(['user' => new ApiResource($user), 'message' => 'Update User successfully'], 200);
     }
 
-    /**
+  /**
      * Remove the specified resource from storage.
      *
-     * @param \App\User $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     * @throws \Exception
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        $user->delete();
-
-        return response(['message' => 'User Deleted successfully']);
+        $user = User::findOrfail($id);
+        if ($user->delete()) {
+            return response(['message' => 'User Deleted successfully']);
+        }
+        return response(['message' => 'Error while deleting']);
+        // return "Error while deleting";
     }
 
 }
