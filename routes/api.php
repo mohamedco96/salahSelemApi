@@ -9,7 +9,9 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\Controller;
 
 
+
 Route::post('/v1/auth', [UserController::class, 'auth']);
+
 
 Route::apiResource('/v1/user', UserController::class)->middleware('auth:api');
 

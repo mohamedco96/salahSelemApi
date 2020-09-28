@@ -16,29 +16,31 @@ class UserController extends Controller
 {
     public function auth(Request $request)
     {
-        $loginData = $request->validate([
-            'email' => 'email|required',
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'email' => 'required',
             'password' => 'required',
         ]);
 
-        if (!auth()->attempt($loginData)) {
-            // register();
-            $loginData['password'] = bcrypt($request->password);
-            $user = User::create($loginData);
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+             // register
+        if (!auth()->attempt($data)) {
+            $data['password'] = bcrypt($request->password);
+            $user = User::create($data);
             $accessToken = $user->createToken('authToken')->accessToken;
-
             return response(['user' => $user, 'access_token' => $accessToken]);
             return response(['message' => 'new user created']);
-            // return response(['message' => 'Invalid Credentials']);
         }
-
+        
+        //login
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
-
         return response(['user' => auth()->user(), 'access_token' => $accessToken]);
-
     }
 
-
+    
        /**
      * Store a newly created resource in storage.
      *
