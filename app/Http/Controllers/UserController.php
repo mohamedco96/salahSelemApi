@@ -19,7 +19,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'email' => 'required',
+            'social_id' => 'required',
             'password' => 'required',
         ]);
 
@@ -52,9 +52,10 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
         $validator = Validator::make($data, [
-            'email' => 'required|max:255',
+            'social_id' => 'required|max:255',
             'password' => 'required|max:255',
             'role_id' => 'max:255',
+            'email' => 'max:255',
             'avatar' => 'max:255',
             'fname' => 'max:255',
             'lname' => 'max:255',
@@ -96,6 +97,7 @@ class UserController extends Controller
             'fname',
             'lname',
             'age',
+            AllowedFilter::exact('social_id'),
             AllowedFilter::exact('email'),
             AllowedFilter::exact('role_id'),
             AllowedFilter::exact('online'),
