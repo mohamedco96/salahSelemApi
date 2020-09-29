@@ -15,6 +15,10 @@ use App\Http\Controllers\ArticlesTagController;
 use App\Http\Controllers\RecipesController;
 use App\Http\Controllers\RecipesCatagoryController;
 
+use App\Http\Controllers\BannerController;
+
+use App\Http\Controllers\promocodeController;
+
 use App\Http\Controllers\Controller;
 
 
@@ -35,6 +39,10 @@ Route::apiResource('/v1/articleTag', ArticlesTagController::class);
 
 Route::apiResource('/v1/recipes', RecipesController::class);
 Route::apiResource('/v1/recipesCatagory', RecipesCatagoryController::class);
+
+Route::apiResource('/v1/banner', BannerController::class);
+
+Route::apiResource('/v1/promocode', promocodeController::class);
 
 // Route::resource('/v1/user', UserController::class, ['except' => ['']]);
 
