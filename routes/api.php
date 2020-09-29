@@ -12,6 +12,9 @@ use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\ArticlesCatagoryController;
 use App\Http\Controllers\ArticlesTagController;
 
+use App\Http\Controllers\RecipesController;
+use App\Http\Controllers\RecipesCatagoryController;
+
 use App\Http\Controllers\Controller;
 
 
@@ -29,6 +32,9 @@ Route::apiResource('/v1/videotype', VideoTypeController::class);
 Route::apiResource('/v1/article', ArticlesController::class);
 Route::apiResource('/v1/articleCatagory', ArticlesCatagoryController::class);
 Route::apiResource('/v1/articleTag', ArticlesTagController::class);
+
+Route::apiResource('/v1/recipes', RecipesController::class);
+Route::apiResource('/v1/recipesCatagory', RecipesCatagoryController::class);
 
 // Route::resource('/v1/user', UserController::class, ['except' => ['']]);
 
