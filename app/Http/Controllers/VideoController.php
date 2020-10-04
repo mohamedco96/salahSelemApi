@@ -142,5 +142,24 @@ class VideoController extends Controller
         }
         return "Error while deleting";
     }
+
+          /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function addToFavorites(Request $request)
+    {
+        $userInfo=auth('api')->user();
+        if ($userInfo!==null)
+        {
+            $vid = Video::find($request->id);	
+            $vid->favorites()->create([
+                'user_id' => $userInfo->id,
+            ]);
+            return "Video is added for user:".$userInfo->social_id;
+        }else{
+            return "User is not logged in.";
+        }
+    }
 }
 

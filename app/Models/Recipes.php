@@ -14,4 +14,14 @@ class Recipes extends Model
      * @var array
      */
     protected $fillable = ['title', 'catagory', 'thumbnail', 'image','content', 'calories', 'fat', 'protein', 'carb'];
+
+       /**
+     * Relationship: Favorite
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
 }

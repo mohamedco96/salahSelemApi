@@ -14,4 +14,14 @@ class Article extends Model
      * @var array
      */
     protected $fillable = ['title', 'author', 'catagory', 'tag','thumbnail', 'image', 'content'];
+
+     /**
+     * Relationship: Favorite
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
 }

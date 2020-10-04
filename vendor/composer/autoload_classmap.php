@@ -44,6 +44,8 @@ return array(
     'App\\Models\\ArticleTag' => $baseDir . '/app/Models/ArticleTag.php',
     'App\\Models\\ArticlesCatagory' => $baseDir . '/app/Models/ArticlesCatagory.php',
     'App\\Models\\Banner' => $baseDir . '/app/Models/Banner.php',
+    'App\\Models\\Comment' => $baseDir . '/app/Models/Comment.php',
+    'App\\Models\\Favorite' => $baseDir . '/app/Models/Favorite.php',
     'App\\Models\\Recipes' => $baseDir . '/app/Models/Recipes.php',
     'App\\Models\\RecipesCatagory' => $baseDir . '/app/Models/RecipesCatagory.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',

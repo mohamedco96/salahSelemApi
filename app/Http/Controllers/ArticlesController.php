@@ -100,6 +100,7 @@ class ArticlesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
+    
     {
         $art = Article::findOrfail($id);
         if ($art->delete()) {
@@ -107,5 +108,25 @@ class ArticlesController extends Controller
         }
         return "Error while deleting";
     }
+
+        /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function addToFavorites(Request $request)
+    {
+        $userInfo=auth('api')->user();
+        if ($userInfo!==null)
+        {
+            $article = Article::find($request->id);	
+            $article->favorites()->create([
+                'user_id' => $userInfo->id,
+            ]);
+            return "Article is added for user:".$userInfo->social_id;
+        }else{
+            return "User is not logged in.";
+        }
+    }
+    
 }
 

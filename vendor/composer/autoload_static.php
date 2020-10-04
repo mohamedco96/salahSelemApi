@@ -618,6 +618,8 @@ class ComposerStaticInite7f3f61d25e4a52ab4600df2bfd45eef
         'App\\Models\\ArticleTag' => __DIR__ . '/../..' . '/app/Models/ArticleTag.php',
         'App\\Models\\ArticlesCatagory' => __DIR__ . '/../..' . '/app/Models/ArticlesCatagory.php',
         'App\\Models\\Banner' => __DIR__ . '/../..' . '/app/Models/Banner.php',
+        'App\\Models\\Comment' => __DIR__ . '/../..' . '/app/Models/Comment.php',
+        'App\\Models\\Favorite' => __DIR__ . '/../..' . '/app/Models/Favorite.php',
         'App\\Models\\Recipes' => __DIR__ . '/../..' . '/app/Models/Recipes.php',
         'App\\Models\\RecipesCatagory' => __DIR__ . '/../..' . '/app/Models/RecipesCatagory.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',

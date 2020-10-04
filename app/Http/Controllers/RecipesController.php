@@ -108,5 +108,24 @@ class RecipesController extends Controller
         }
         return "Error while deleting";
     }
+
+          /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function addToFavorites(Request $request)
+    {
+        $userInfo=auth('api')->user();
+        if ($userInfo!==null)
+        {
+            $rec = Recipes::find($request->id);	
+            $rec->favorites()->create([
+                'user_id' => $userInfo->id,
+            ]);
+            return "Recipes is added for user:".$userInfo->social_id;
+        }else{
+            return "User is not logged in.";
+        }
+    }
 }
 

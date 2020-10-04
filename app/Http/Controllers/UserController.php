@@ -37,9 +37,27 @@ class UserController extends Controller
         
         //login
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        $user = User::find(auth()->user()->id);
+        $user->status = 'online';
+        $user->update();
         return response(['user' => auth()->user(), 'access_token' => $accessToken]);
+
+   
     }
 
+    public function logout(Request $request)
+    {    
+        $user = User::find(auth('api')->user()->id);
+        if ($user!==null)
+        {
+            $user->status = 'offline';
+            $user->update();
+            return "User is logout";
+        }else{
+            return "User is not logged in.";
+        }
+      
+    }
     
        /**
      * Store a newly created resource in storage.
@@ -71,7 +89,7 @@ class UserController extends Controller
             'days_of_training' => 'max:255',
             'training_type' => 'max:255',
             'Water' => 'max:255',
-            'online' => 'max:255',
+            'status' => 'max:255',
             
         ]);
 
@@ -100,7 +118,7 @@ class UserController extends Controller
             AllowedFilter::exact('social_id'),
             AllowedFilter::exact('email'),
             AllowedFilter::exact('role_id'),
-            AllowedFilter::exact('online'),
+            AllowedFilter::exact('status'),
             AllowedFilter::exact('gender'),
 
         ])
@@ -164,4 +182,21 @@ class UserController extends Controller
         // return "Error while deleting";
     }
 
+            /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function userFavorites()
+    {
+        $userInfo=auth('api')->user();
+        
+        if ($userInfo!==null)
+        {
+            $userInfo=auth('api')->user();
+            $userfavorites = User::find($userInfo->id)->favorites;
+            return new ApiResource($userfavorites);
+        }else{
+            return "User is not logged in.";
+        }
+    }
 }
