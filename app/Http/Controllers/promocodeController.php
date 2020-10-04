@@ -44,8 +44,8 @@ class promocodeController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|max:255',
-            'percentage' => 'required|max:255',
+            'name' => 'required|max:255|unique:promocodes',
+            'percentage' => 'required|max:255|numeric',
         ]);
 
         if($validator->fails()){
@@ -80,8 +80,19 @@ class promocodeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'max:255|unique:promocodes',
+            'percentage' => 'max:255|numeric',
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+
         $promo = promocode::find($id);
-        $promo->update($request->all());
+        $promo->update($data);
         return response(['promocode' => new promocodeResource($promo), 'message' => 'Update promocode successfully'], 200);
     }
 

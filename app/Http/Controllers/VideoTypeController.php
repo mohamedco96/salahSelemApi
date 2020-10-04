@@ -44,8 +44,7 @@ class VideoTypeController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|max:255',
-            'description' => 'max:255',
+            'name' => 'required|max:255|unique:video_types',
         ]);
 
         if($validator->fails()){
@@ -80,8 +79,18 @@ class VideoTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'max:255|unique:video_types',
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+
         $vid = VideoType::find($id);
-        $vid->update($request->all());
+        $vid->update($data);
         return response(['VideoType' => new VideoTypeResource($vid), 'message' => 'Update VideoType successfully'], 200);
     }
 

@@ -50,10 +50,10 @@ class RecipesController extends Controller
             'thumbnail' => 'required|max:255',
             'image' => 'required|max:255',
             'content' => 'required',
-            'calories' => 'max:255',
-            'fat' => 'max:255',
-            'protein' => 'max:255',
-            'carb' => 'max:255',
+            'calories' => 'max:255|numeric',
+            'fat' => 'max:255|numeric',
+            'protein' => 'max:255|numeric',
+            'carb' => 'max:255|numeric',
 
         ]);
 
@@ -89,6 +89,20 @@ class RecipesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'calories' => 'max:255|numeric',
+            'fat' => 'max:255|numeric',
+            'protein' => 'max:255|numeric',
+            'carb' => 'max:255|numeric',
+
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+
         $rec = Recipes::find($id);
         $rec->update($request->all());
         return response(['Recipes' => new RecipesResource($rec), 'message' => 'Update Recipes successfully'], 200);

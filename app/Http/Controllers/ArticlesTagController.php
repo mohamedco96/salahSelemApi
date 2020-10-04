@@ -44,8 +44,7 @@ class ArticlesTagController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|max:255',
-            'description' => 'max:255',
+            'name' => 'required|max:255|unique:article_tags',
         ]);
 
         if($validator->fails()){
@@ -80,8 +79,18 @@ class ArticlesTagController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'max:255|unique:article_tags',
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+
         $art = ArticleTag::find($id);
-        $art->update($request->all());
+        $art->update($data);
         return response(['ArticleTag' => new ArticlesTagResource($art), 'message' => 'Update ArticleTag successfully'], 200);
     }
 

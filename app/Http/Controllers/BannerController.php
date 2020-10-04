@@ -47,8 +47,6 @@ class BannerController extends Controller
             'name' => 'required|max:255',
             'link' => 'required|max:255',
             'image' => 'required|max:255',
-            'body' => 'max:255',
-            'description' => 'max:255',
         ]);
 
         if($validator->fails()){

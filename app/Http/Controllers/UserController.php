@@ -19,7 +19,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'social_id' => 'required',
+            'social_id' => 'required|unique:users',
             'password' => 'required',
         ]);
 
@@ -70,25 +70,25 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
         $validator = Validator::make($data, [
-            'social_id' => 'required|max:255',
-            'password' => 'required|max:255',
-            'role_id' => 'max:255',
-            'email' => 'max:255',
+            'social_id' => 'required|unique:users',
+            'password' => 'required',
+            'role_id' => 'max:255|numeric',
+            'email' => 'max:255|email',
             'avatar' => 'max:255',
             'fname' => 'max:255',
             'lname' => 'max:255',
-            'age' => 'max:255',
+            'age' => 'max:255|numeric',
             'gender' => 'max:255',
-            'height' => 'max:255',
-            'weight' => 'max:255',
-            'neck_size' => 'max:255',
-            'waist_size' => 'max:255',
-            'hips' => 'max:255',
+            'height' => 'max:255|numeric',
+            'weight' => 'max:255|numeric',
+            'neck_size' => 'max:255|numeric',
+            'waist_size' => 'max:255|numeric',
+            'hips' => 'max:255|numeric',
             'goals' => 'max:255',
             'activity' => 'max:255',
-            'days_of_training' => 'max:255',
+            'days_of_training' => 'max:255|numeric',
             'training_type' => 'max:255',
-            'Water' => 'max:255',
+            'Water' => 'max:255|numeric',
             'status' => 'max:255',
             
         ]);
@@ -160,8 +160,36 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $data = $request->all();
 
-        $user->update($request->all());
+        $validator = Validator::make($data, [
+            'password' => 'max:255',
+            'role_id' => 'max:255|numeric',
+            'email' => 'max:255|email',
+            'avatar' => 'max:255',
+            'fname' => 'max:255',
+            'lname' => 'max:255',
+            'age' => 'max:255|numeric',
+            'gender' => 'max:255',
+            'height' => 'max:255|numeric',
+            'weight' => 'max:255|numeric',
+            'neck_size' => 'max:255|numeric',
+            'waist_size' => 'max:255|numeric',
+            'hips' => 'max:255|numeric',
+            'goals' => 'max:255',
+            'activity' => 'max:255',
+            'days_of_training' => 'max:255|numeric',
+            'training_type' => 'max:255',
+            'Water' => 'max:255|numeric',
+            'status' => 'max:255',
+        ]);
+        
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+        
+        $user->update($data);
 
         return response(['user' => new ApiResource($user), 'message' => 'Update User successfully'], 200);
     }
@@ -189,7 +217,7 @@ class UserController extends Controller
     public function userFavorites()
     {
         $userInfo=auth('api')->user();
-        
+
         if ($userInfo!==null)
         {
             $userInfo=auth('api')->user();

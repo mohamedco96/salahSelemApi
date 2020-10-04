@@ -59,10 +59,8 @@ class VideoController extends Controller
             'type' => 'required|max:255',
             'video_thumbnail' => 'required|max:255',
             'video_Link' => 'required|max:255',
-            'video_Description' => 'max:255',
-            'video_Quote' => 'max:255',
-            'video_Reps' => 'max:255',
-            'video_Sets' => 'max:255',
+            'video_Reps' => 'max:255|numeric',
+            'video_Sets' => 'max:255|numeric',
         ]);
 
         if($validator->fails()){
@@ -100,31 +98,6 @@ class VideoController extends Controller
         $vid = Video::find($id);
         $vid->update($request->all());
         return response(['Video' => new VideoResource($vid), 'message' => 'Update Video successfully'], 200);
-        // return new VideoResource($vid);
-
-
-        // $vid = Video::find($id);
-        // $data = $request->all();
-
-        // $validator = Validator::make($data, [
-        //     'video_Name' => 'required|max:255',
-        //     'catagory' => 'required|max:255',
-        //     'type' => 'required|max:255',
-        //     'video_thumbnail' => 'required|max:255',
-        //     'video_Link' => 'required|max:255',
-        //     'video_Description' => 'max:255',
-        //     'video_Quote' => 'max:255',
-        //     'video_Reps' => 'max:255',
-        //     'video_Sets' => 'max:255',
-        // ]);
-
-        // if($validator->fails()){
-        //     return response(['error' => $validator->errors(), 'Validation Error']);
-        // }
-        // $vid->update($data);
-        // $vid = Video::create($data);
-
-        // return response([ 'Video' => new VideoResource($vid), 'message' => 'Update Video successfully'], 200);
     }
 
     /**

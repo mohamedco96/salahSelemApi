@@ -44,8 +44,7 @@ class ArticlesCatagoryController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|max:255',
-            'description' => 'max:255',
+            'name' => 'required|max:255|unique:articles_catagories',
         ]);
 
         if($validator->fails()){
@@ -80,8 +79,19 @@ class ArticlesCatagoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'max:255|unique:articles_catagories',
+        ]);
+        
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+
         $art = ArticlesCatagory::find($id);
-        $art->update($request->all());
+        $art->update($data);
         return response(['ArticlesCatagory' => new ArticlesCatagoryResource($art), 'message' => 'Update ArticlesCatagory successfully'], 200);
     }
 

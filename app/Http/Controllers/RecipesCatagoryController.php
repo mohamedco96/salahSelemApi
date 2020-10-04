@@ -44,8 +44,7 @@ class RecipesCatagoryController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|max:255',
-            'description' => 'max:255',
+            'name' => 'required|max:255|unique:recipes_catagories',
         ]);
 
         if($validator->fails()){
@@ -80,8 +79,18 @@ class RecipesCatagoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'max:255|unique:recipes_catagories',
+        ]);
+
+        if($validator->fails()){
+            return response(['error' => $validator->errors(), 'Validation Error']);
+        }
+
         $rec = RecipesCatagory::find($id);
-        $rec->update($request->all());
+        $rec->update($data);
         return response(['RecipesCatagory' => new RecipesCatagoryResource($rec), 'message' => 'Update RecipesCatagory successfully'], 200);
     }
 
