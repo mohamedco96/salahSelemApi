@@ -30,6 +30,7 @@ class ArticlesController extends Controller
             AllowedFilter::exact('catagory'),
             AllowedFilter::exact('tag'),
         ])
+        ->allowedSorts('created_at')
         ->paginate()
         ->appends(request()->query());
         

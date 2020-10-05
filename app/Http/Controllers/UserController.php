@@ -19,7 +19,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'social_id' => 'required|unique:users',
+            'social_id' => 'required',
             'password' => 'required',
         ]);
 
@@ -89,6 +89,11 @@ class UserController extends Controller
             'days_of_training' => 'max:255|numeric',
             'training_type' => 'max:255',
             'Water' => 'max:255|numeric',
+            'sleep_hours' => 'max:255|numeric',
+            'fat' => 'max:255|numeric',
+            'calorie' => 'max:255|numeric',
+            'protein' => 'max:255|numeric',
+            'volume' => 'max:255|numeric',
             'status' => 'max:255',
             
         ]);
@@ -181,6 +186,11 @@ class UserController extends Controller
             'days_of_training' => 'max:255|numeric',
             'training_type' => 'max:255',
             'Water' => 'max:255|numeric',
+            'sleep_hours' => 'max:255|numeric',
+            'fat' => 'max:255|numeric',
+            'calorie' => 'max:255|numeric',
+            'protein' => 'max:255|numeric',
+            'volume' => 'max:255|numeric',
             'status' => 'max:255',
         ]);
         

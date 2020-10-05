@@ -13,7 +13,8 @@ class Recipes extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'catagory', 'thumbnail', 'image','content', 'calories', 'fat', 'protein', 'carb'];
+    protected $fillable = ['title', 'catagory', 'thumbnail', 'image','content', 'calories', 'fat', 
+                            'protein', 'carb', 'time', 'ingredients'];
 
        /**
      * Relationship: Favorite

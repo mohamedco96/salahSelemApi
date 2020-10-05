@@ -27,6 +27,7 @@ class RecipesController extends Controller
         ->allowedFilters([
             'title',
             AllowedFilter::exact('catagory'),
+            
         ])
         ->paginate()
         ->appends(request()->query());
@@ -49,7 +50,9 @@ class RecipesController extends Controller
             'catagory' => 'required|max:255',
             'thumbnail' => 'required|max:255',
             'image' => 'required|max:255',
+            'ingredients' => 'required',
             'content' => 'required',
+            'time' => 'max:255|numeric',
             'calories' => 'max:255|numeric',
             'fat' => 'max:255|numeric',
             'protein' => 'max:255|numeric',
@@ -96,6 +99,7 @@ class RecipesController extends Controller
             'fat' => 'max:255|numeric',
             'protein' => 'max:255|numeric',
             'carb' => 'max:255|numeric',
+            'time' => 'max:255|numeric',
 
         ]);
 
