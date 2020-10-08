@@ -268,4 +268,29 @@ class UserController extends Controller
         }
     }
 
+              /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function interesteds(Request $request)
+    {
+        $userInfo=auth('api')->user();
+        if ($userInfo!==null)
+        {
+            $user = User::find($userInfo->id);	
+            $user->interesteds()->create([
+                'user_id' => $userInfo->id,
+                'functional_training' => 'true',
+                'power_training' => 'true',
+                'CrossFit' => 'true',
+                'yoga' => 'true',
+                'workouts' => 'true',
+                'cardio' => 'true',
+            ]);
+            return "interesteds is added for user:".$userInfo->social_id;
+        }else{
+            return "User is not logged in.";
+        }
+    }
+
 }

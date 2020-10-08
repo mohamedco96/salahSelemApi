@@ -24,4 +24,34 @@ class Video extends Model
     {
         return $this->morphMany(Favorite::class, 'favoritable');
     }
+
+            /**
+     * Relationship: Favorite
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function Videocategoriespivot()
+    {
+        return $this->morphMany(Videocategoriespivot::class, 'Videocategoriespivotable');
+    }
+
+            /**
+     * Relationship: Favorite
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function VideoTypePivot()
+    {
+        return $this->morphMany(VideoTypePivot::class, 'VideoTypePivotable');
+    }
+
+            /**
+     * Relationship: Favorite
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function MusclePivot()
+    {
+        return $this->morphMany(MusclePivot::class, 'MusclePivotable');
+    }
   }

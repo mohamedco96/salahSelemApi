@@ -156,5 +156,98 @@ class VideoController extends Controller
             return "User is not logged in.";
         }
     }
+
+            /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function videoFillter(Request $request)
+    {
+        $userInfo=auth('api')->user();
+
+        if ($userInfo!==null)
+        {
+ /****************************************************************************************************************/       
+        $interesteds = DB::table('interesteds')
+            ->where('interesteds.user_id', '=', $userInfo->id)
+            ->get();
+/****************************************************************************************************************/
+        $query = DB::table('videos')
+            ->join('videocategoriespivots', 'videos.id', '=', 'videocategoriespivots.video_id')
+            ->join('video_type_pivots', 'videos.id', '=', 'video_type_pivots.video_id')
+            ->join('video_tag_pivots', 'videos.id', '=', 'video_tag_pivots.video_id')
+            ->join('muscle_pivots', 'videos.id', '=', 'muscle_pivots.video_id')
+            ;
+/****************************************************************************************************************/
+            // if ($interesteds[0]->functional_training=='false') {
+            //     $query->where('video_catagory_id', '!=', '15');
+            //     $result= $query->get();
+            // }
+
+            // if ($interesteds[0]->power_training=='false') {
+            //     $query->where('video_catagory_id', '!=', '17');
+            //     $result= $query->get();
+            // }
+
+            if ($interesteds[0]->CrossFit=='false') {
+                $query->where('video_catagory_id', '!=', '17');
+                $result= $query->get();
+            }
+
+            // if ($interesteds[0]->yoga=='false') {
+            //     $query->where('video_catagory_id', '!=', '17');
+            //     $result= $query->get();
+            // }
+
+            // if ($interesteds[0]->workouts=='false') {
+            //     $query->where('video_catagory_id', '!=', '15');
+            //     $result= $query->get();
+            // }
+
+            // if ($interesteds[0]->cardio=='false') {
+            //     $query->where('video_catagory_id', '!=', '17');
+            //     $result= $query->get();
+            // }
+/****************************************************************************************************************/
+            if ($userInfo->training_type=='home') {
+                $query->where('video_type_pivots.video_type_id', '=', '1');
+                $result= $query->get();
+            }
+
+            if ($userInfo->training_type=='gym') {
+                $query->where('video_type_pivots.video_type_id', '=', '2');
+                $result= $query->get();
+            }
+/****************************************************************************************************************/
+            if ($userInfo->tag=='weight') {
+                $query->where('video_tag_pivots.video_tag_id', '=', '2');
+                $result= $query->get();
+            }
+
+            if ($userInfo->tag=='no weight') {
+                $query->where('video_tag_pivots.video_tag_id', '=', '1');
+                $result= $query->get();
+            }
+/****************************************************************************************************************/
+            if ($request->muscle=='Muscle1') {
+                $query->where('muscle_pivots.muscle_id', '=', '1');
+                $result= $query->get();
+            }
+
+            if ($request->muscle=='Muscle2') {
+                $query->where('muscle_pivots.muscle_id', '=', '2');
+                $result= $query->get();
+            }
+
+            if ($request->muscle=='Muscle3') {
+                $query->where('muscle_pivots.muscle_id', '=', '3');
+                $result= $query->get();
+            }
+/****************************************************************************************************************/
+            return new VideoResource($result);
+        }else{
+            return "User is not logged in.";
+        }
+    }
 }
 

@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'role_id', 'social_id', 'email', 'password', 'fname', 'lname', 'age', 'gender', 'height', 'weight', 
-        'neck_size', 'waist_size', 'hips', 'goals', 'activity', 'days_of_training', 'training_type', 'Water', 
+        'neck_size', 'waist_size', 'hips', 'goals', 'activity', 'days_of_training', 'training_type', 'tag', 'Water', 
         'status', 'avatar','sleep_hours', 'fat', 'calorie', 'protein', 'volume',
     ];
 
@@ -50,6 +50,16 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+            /**
+     * Relationship: comments
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function interesteds()
+    {
+        return $this->hasMany(Interested::class);
     }
 }
 
