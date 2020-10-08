@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Video;
+use App\Models\Favorite;
+use App\Models\Article;
+
+
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
@@ -236,5 +241,17 @@ class UserController extends Controller
         }else{
             return "User is not logged in.";
         }
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function test()
+    {
+        $favorites = Article::where(id)->with ('favorites')->first();
+       
+       return new ApiResource($favorites);
     }
 }
