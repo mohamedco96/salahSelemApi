@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\DB;
 
 class VideoController extends Controller
 {
@@ -130,6 +131,27 @@ class VideoController extends Controller
                 'user_id' => $userInfo->id,
             ]);
             return "Video is added for user:".$userInfo->social_id;
+        }else{
+            return "User is not logged in.";
+        }
+    }
+
+              /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function removeFromFavorites(Request $request)
+    {
+        $userInfo=auth('api')->user();
+        if ($userInfo!==null)
+        {
+            $videos = DB::table('favorites')
+            ->where('favorites.user_id', '=', $userInfo->id)
+            ->where('favorites.favoritable_id', '=', $request->id)
+            ->where('favorites.favoritable_type', '=', 'App\Models\Video')
+            ->delete();
+
+            return "Video is delete from favorites for user:".$userInfo->social_id;
         }else{
             return "User is not logged in.";
         }

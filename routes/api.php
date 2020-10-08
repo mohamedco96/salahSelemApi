@@ -36,22 +36,27 @@ Route::post('/v1/auth', [UserController::class, 'auth']);
 Route::post('/v1/logout', [UserController::class, 'logout'])->middleware('auth:api');
 Route::post('/v1/userfavorites', [UserController::class, 'userFavorites'])->middleware('auth:api');
 
+Route::get('/v1/test', [UserController::class, 'test']);
+
 Route::apiResource('/v1/user', UserController::class)->middleware('auth:api');
 
 Route::apiResource('/v1/video', VideoController::class);
 Route::apiResource('/v1/videoCatagory', VideoCatagoryController::class);
 Route::apiResource('/v1/videotype', VideoTypeController::class);
 Route::post('/v1/video/addtofavorites', [VideoController::class, 'addToFavorites'])->middleware('auth:api');
+Route::post('/v1/video/removefromfavorites', [VideoController::class, 'removeFromFavorites'])->middleware('auth:api');
 
 
 Route::apiResource('/v1/article', ArticlesController::class);
 Route::apiResource('/v1/articleCatagory', ArticlesCatagoryController::class);
 Route::apiResource('/v1/articleTag', ArticlesTagController::class);
 Route::post('/v1/article/addtofavorites', [ArticlesController::class, 'addToFavorites'])->middleware('auth:api');
+Route::post('/v1/article/removefromfavorites', [ArticlesController::class, 'removeFromFavorites'])->middleware('auth:api');
 
 Route::apiResource('/v1/recipes', RecipesController::class);
 Route::apiResource('/v1/recipesCatagory', RecipesCatagoryController::class);
 Route::post('/v1/recipes/addtofavorites', [RecipesController::class, 'addToFavorites'])->middleware('auth:api');
+Route::post('/v1/recipes/removefromfavorites', [RecipesController::class, 'removeFromFavorites'])->middleware('auth:api');
 
 Route::apiResource('/v1/banner', BannerController::class);
 

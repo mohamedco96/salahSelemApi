@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\DB;
 
 class ArticlesController extends Controller
 {
@@ -124,6 +125,27 @@ class ArticlesController extends Controller
                 'user_id' => $userInfo->id,
             ]);
             return "Article is added for user:".$userInfo->social_id;
+        }else{
+            return "User is not logged in.";
+        }
+    }
+
+                  /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function removeFromFavorites(Request $request)
+    {
+        $userInfo=auth('api')->user();
+        if ($userInfo!==null)
+        {
+            $Article = DB::table('favorites')
+            ->where('favorites.user_id', '=', $userInfo->id)
+            ->where('favorites.favoritable_id', '=', $request->id)
+            ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+            ->delete();
+            // return new ArticlesResource($Article);
+            return "Article is delete from favorites for user:".$userInfo->social_id;
         }else{
             return "User is not logged in.";
         }

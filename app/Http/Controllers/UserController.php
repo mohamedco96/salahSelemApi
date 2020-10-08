@@ -235,23 +235,37 @@ class UserController extends Controller
 
         if ($userInfo!==null)
         {
-            $userInfo=auth('api')->user();
-            $userfavorites = User::find($userInfo->id)->favorites;
-            return new ApiResource($userfavorites);
+        $articles = DB::table('users')
+            ->join('favorites', 'users.id', '=', 'favorites.user_id')
+            ->join('articles', 'favorites.favoritable_id', '=', 'articles.id')
+            ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+            ->where('users.id', '=', $userInfo->id)
+            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'articles.id', 'articles.title', 'articles.thumbnail', 'articles.catagory')
+            ->get();
+
+      
+        $videos = DB::table('users')
+            ->join('favorites', 'users.id', '=', 'favorites.user_id')
+            ->join('videos', 'favorites.favoritable_id', '=', 'videos.id')
+            ->where('favorites.favoritable_type', '=', 'App\Models\Video')
+            ->where('users.id', '=', $userInfo->id)
+            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'videos.id', 'videos.video_Name', 'videos.video_thumbnail', 'videos.catagory')
+            ->get();
+
+        $recipes = DB::table('users')
+            ->join('favorites', 'users.id', '=', 'favorites.user_id')
+            ->join('recipes', 'favorites.favoritable_id', '=', 'recipes.id')
+            ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
+            ->where('users.id', '=', $userInfo->id)
+            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'recipes.id', 'recipes.title', 'recipes.thumbnail', 'recipes.catagory')
+            ->get();
+
+        $merged = $articles->merge($videos)->merge($recipes);
+        $result = $merged->all();
+       return new ApiResource($result);
         }else{
             return "User is not logged in.";
         }
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     * @return \Illuminate\Http\Response
-     */
-    public function test()
-    {
-        $favorites = Article::where(id)->with ('favorites')->first();
-       
-       return new ApiResource($favorites);
-    }
 }
