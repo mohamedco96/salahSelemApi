@@ -21,13 +21,12 @@ class RecipesFactory extends Factory
      */
     public function definition()
     {
-        $catagory = $this->faker->randomElement(['cat1', 'cat2', 'Text Text']);
-
         return [
             'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-            'catagory' => $catagory,
             'thumbnail' => $this->faker->imageUrl($width = 300, $height = 300, 'food', true, 'Faker'),
             'image' => $this->faker->imageUrl($width = 640, $height = 480, 'food', true, 'Faker'),
+            'time' => $this->faker->numberBetween(1,100),
+            'ingredients' => $this->faker->paragraph,
             'content' => $this->faker->paragraph,
             'calories' => $this->faker->numberBetween(0,100),
             'fat' => $this->faker->numberBetween(0,100),

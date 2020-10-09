@@ -167,5 +167,28 @@ class RecipesController extends Controller
             return "User is not logged in.";
         }
     }
+
+
+
+            /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function RecipesFillter(Request $request)
+    {
+       
+            $query = DB::table('recipes')
+            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id')
+            ;
+            $result= $query->get();
+/****************************************************************************************************************/
+            if ($request->category != null) {
+                $query->where('recipes_category_pivots.recipes_catagory_id', '=', $request->category);
+                $result= $query->get();
+            }
+/****************************************************************************************************************/
+            return new RecipesResource($result);
+
+    }
 }
 

@@ -59,6 +59,8 @@ Route::apiResource('/v1/recipes', RecipesController::class);
 Route::apiResource('/v1/recipesCatagory', RecipesCatagoryController::class);
 Route::post('/v1/recipes/addtofavorites', [RecipesController::class, 'addToFavorites'])->middleware('auth:api');
 Route::post('/v1/recipes/removefromfavorites', [RecipesController::class, 'removeFromFavorites'])->middleware('auth:api');
+Route::post('/v1/recipes/recipesfillter', [RecipesController::class, 'RecipesFillter']);
+
 
 Route::apiResource('/v1/banner', BannerController::class);
 

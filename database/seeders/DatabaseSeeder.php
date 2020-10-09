@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\MusclePivot::factory(100)->create();
         // \App\Models\ArticlesCatagoryPivot::factory(100)->create();
         // \App\Models\ArticleTagPivot::factory(100)->create();
+        \App\Models\RecipesCategoryPivot::factory(100)->create();
+
 
 
 
