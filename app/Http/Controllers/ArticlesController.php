@@ -130,10 +130,10 @@ class ArticlesController extends Controller
         }
     }
 
-                  /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
-     */
+    */
     public function removeFromFavorites(Request $request)
     {
         $userInfo=auth('api')->user();
@@ -149,6 +149,35 @@ class ArticlesController extends Controller
         }else{
             return "User is not logged in.";
         }
+    }
+
+
+
+            /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function articleFillter(Request $request)
+    {
+       
+            $query = DB::table('articles')
+            ->join('articles_catagory_pivots', 'articles.id', '=', 'articles_catagory_pivots.article_id')
+            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id')
+            ;
+            $result= $query->get();
+/****************************************************************************************************************/
+            if ($request->category != null) {
+                $query->where('articles_catagory_pivots.articles_catagory_id', '=', $request->category);
+                $result= $query->get();
+            }
+
+            if ($request->tag != null) {
+                $query->where('article_tag_pivots.article_tag_id', '=', $request->tag);
+                $result= $query->get();
+            }
+/****************************************************************************************************************/
+            return new ArticlesResource($result);
+
     }
     
 }
