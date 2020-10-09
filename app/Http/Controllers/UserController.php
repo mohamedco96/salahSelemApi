@@ -240,7 +240,7 @@ class UserController extends Controller
             ->join('articles', 'favorites.favoritable_id', '=', 'articles.id')
             ->where('favorites.favoritable_type', '=', 'App\Models\Article')
             ->where('users.id', '=', $userInfo->id)
-            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'articles.id', 'articles.title', 'articles.thumbnail', 'articles.catagory')
+            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'articles.id', 'articles.title', 'articles.thumbnail')
             ->get();
 
       
@@ -249,7 +249,7 @@ class UserController extends Controller
             ->join('videos', 'favorites.favoritable_id', '=', 'videos.id')
             ->where('favorites.favoritable_type', '=', 'App\Models\Video')
             ->where('users.id', '=', $userInfo->id)
-            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'videos.id', 'videos.video_Name', 'videos.video_thumbnail', 'videos.catagory')
+            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'videos.id', 'videos.video_Name', 'videos.video_thumbnail')
             ->get();
 
         $recipes = DB::table('users')
@@ -257,7 +257,7 @@ class UserController extends Controller
             ->join('recipes', 'favorites.favoritable_id', '=', 'recipes.id')
             ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
             ->where('users.id', '=', $userInfo->id)
-            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'recipes.id', 'recipes.title', 'recipes.thumbnail', 'recipes.catagory')
+            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'recipes.id', 'recipes.title', 'recipes.thumbnail')
             ->get();
 
         $merged = $articles->merge($videos)->merge($recipes);

@@ -44,7 +44,7 @@ Route::apiResource('/v1/videoCatagory', VideoCatagoryController::class);
 Route::apiResource('/v1/videotype', VideoTypeController::class);
 Route::post('/v1/video/addtofavorites', [VideoController::class, 'addToFavorites'])->middleware('auth:api');
 Route::post('/v1/video/removefromfavorites', [VideoController::class, 'removeFromFavorites'])->middleware('auth:api');
-Route::post('/v1/video/videofillter', [VideoController::class, 'videoFillter'])->middleware('auth:api');
+Route::post('/v1/video/videofillter', [VideoController::class, 'videoFillter']);
 
 
 Route::apiResource('/v1/article', ArticlesController::class);
