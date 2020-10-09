@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class MusclePivot extends Model
 {
+    public $timestamps = false;
     use HasFactory;
 /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['video_type_id', 'video_id'];
+    protected $fillable = ['muscle_id', 'video_id'];
 
     /**
      * Relationship: author

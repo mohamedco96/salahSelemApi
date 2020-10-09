@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class VideoTypePivot extends Model
 {
+    public $timestamps = false;
     use HasFactory;
 /**
      * The attributes that are mass assignable.

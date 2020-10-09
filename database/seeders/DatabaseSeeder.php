@@ -17,6 +17,14 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Article::factory(100)->create();
         // \App\Models\Video::factory(100)->create();
         // \App\Models\Recipes::factory(100)->create();
+        // \App\Models\Videocategoriespivot::factory(100)->create();
+        // \App\Models\VideoTypePivot::factory(100)->create();
+        // \App\Models\VideoTagPivot::factory(100)->create();
+        \App\Models\MusclePivot::factory(100)->create();
+
+
+
+
     }
  
 }
