@@ -13,7 +13,7 @@ class Video extends Model
      *
      * @var array
      */
-    protected $fillable = ['video_Name', 'video_Description', 'video_thumbnail', 'video_Link','video_Quote', 'video_Reps', 'video_Sets', 'catagory', 'type'];
+    protected $fillable = ['video_Name', 'video_Description', 'video_thumbnail', 'video_Link','video_Quote', 'video_Reps', 'video_Sets'];
 
         /**
      * Relationship: Favorite
