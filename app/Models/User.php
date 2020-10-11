@@ -18,9 +18,9 @@ class User extends \TCG\Voyager\Models\User
      * @var array
      */
     protected $fillable = [
-        'role_id', 'social_id', 'email', 'password', 'fname', 'lname', 'age', 'gender', 'height', 'weight', 
-        'neck_size', 'waist_size', 'hips', 'goals', 'activity', 'days_of_training', 'training_type', 'tag', 'Water', 
-        'status', 'avatar','sleep_hours', 'fat', 'calorie', 'protein', 'volume', 'name',
+        'role_id', 'social_id', 'email', 'password','age', 'gender', 'height', 'weight',
+        'neck_size', 'waist_size', 'hips', 'goals', 'activity', 'days_of_training', 'training_type', 'tag', 'Water',
+        'status', 'avatar', 'sleep_hours', 'fat', 'calorie', 'protein', 'volume', 'name',
     ];
 
     /**
@@ -42,7 +42,7 @@ class User extends \TCG\Voyager\Models\User
         'email_verified_at' => 'datetime',
     ];
 
-         /**
+    /**
      * Relationship: comments
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -52,7 +52,7 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasMany(Favorite::class);
     }
 
-            /**
+    /**
      * Relationship: comments
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -62,5 +62,3 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasMany(Interested::class);
     }
 }
-
-

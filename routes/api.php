@@ -33,10 +33,16 @@ use App\Http\Resources\ArticlesResource;
 
 
 Route::post('/v1/auth', [UserController::class, 'auth']);
-Route::post('/v1/logout', [UserController::class, 'logout'])->middleware('auth:api');
-Route::post('/v1/userfavorites', [UserController::class, 'userFavorites'])->middleware('auth:api');
+Route::post('/v1/logout', [UserController::class, 'logout']);
+Route::post('/v1/userfavorites', [UserController::class, 'userFavorites']);
 Route::apiResource('/v1/user', UserController::class)->middleware('auth:api');
-Route::post('/v1/user/addtointeresteds', [UserController::class, 'interesteds'])->middleware('auth:api');
+Route::post('/v1/user/addinteresteds', [UserController::class, 'AddInteresteds']);
+Route::post('/v1/user/updateinteresteds', [UserController::class, 'UpdateInteresteds']);
+Route::post('/v1/user/deleteinteresteds', [UserController::class, 'DeleteInteresteds']);
+Route::post('/v1/user/showinteresteds', [UserController::class, 'ShowInteresteds']);
+
+
+
 
 
 Route::apiResource('/v1/video', VideoController::class);

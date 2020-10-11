@@ -28,43 +28,39 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
-             // register
+        // register
         if (!auth()->attempt($data)) {
             $data['password'] = bcrypt($request->password);
             $user = User::create($data);
             $accessToken = $user->createToken('authToken')->accessToken;
-            return response(['user' => $user, 'access_token' => $accessToken]);
-            return response(['message' => 'new user created']);
+            return response(['message' => 'Register successfully','user' => $user, 'access_token' => $accessToken]);
         }
-        
+
         //login
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         $user = User::find(auth()->user()->id);
         $user->status = 'online';
         $user->update();
-        return response(['user' => auth()->user(), 'access_token' => $accessToken]);
-
-   
+        return response(['message' => 'Login successfully','user' => auth()->user(), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request)
-    {    
-        $user = User::find(auth('api')->user()->id);
-        if ($user!==null)
-        {
+    {
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
+            $user = User::find($userInfo->id);
             $user->status = 'offline';
             $user->update();
-            return "User is logout";
-        }else{
+            return "User is logout successfully";
+        } else {
             return "User is not logged in.";
         }
-      
     }
-    
-       /**
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -77,39 +73,30 @@ class UserController extends Controller
         $validator = Validator::make($data, [
             'social_id' => 'required|unique:users',
             'password' => 'required',
-            'role_id' => 'max:255|numeric',
-            'email' => 'max:255|email',
-            'avatar' => 'max:255',
-            'fname' => 'max:255',
-            'lname' => 'max:255',
+            'role_id' => 'numeric',
+            'email' => 'email',
             'age' => 'numeric',
-            // 'gender' => '',
             'height' => 'numeric',
             'weight' => 'numeric',
             'neck_size' => 'numeric',
             'waist_size' => 'numeric',
             'hips' => 'numeric',
-            'goals' => 'max:255',
-            'activity' => 'max:255',
             'days_of_training' => 'numeric',
-            'training_type' => 'max:255',
             'Water' => 'numeric',
             'sleep_hours' => 'numeric',
             'fat' => 'numeric',
             'calorie' => 'numeric',
             'protein' => 'numeric',
             'volume' => 'numeric',
-            'status' => 'max:255',
-            
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
 
         $User = User::create($data);
 
-        return response([ 'user' => new ApiResource($User), 'message' => 'Created User successfully'], 200);
+        return response(['message' => 'Created User successfully', 'user' => new ApiResource($User)], 200);
     }
 
 
@@ -121,29 +108,19 @@ class UserController extends Controller
     public function index()
     {
         $user = QueryBuilder::for(User::class)
-        ->allowedFilters([
-            'fname',
-            'lname',
-            'age',
-            AllowedFilter::exact('social_id'),
-            AllowedFilter::exact('email'),
-            AllowedFilter::exact('role_id'),
-            AllowedFilter::exact('status'),
-            AllowedFilter::exact('gender'),
+            ->allowedFilters([
+                'name',
+                'age',
+                AllowedFilter::exact('social_id'),
+                AllowedFilter::exact('email'),
+                AllowedFilter::exact('role_id'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('gender'),
+            ])
+            ->paginate()
+            ->appends(request()->query());
 
-        ])
-        ->paginate()
-        ->appends(request()->query());
-        
         return ApiResource::collection($user);
-
-
-        // $user = User::paginate(3);
-        
-    // return view('products.index-paging')->with('products', $products);
-
-        // $user = User::all();
-        // return response(['user' => ApiResource::collection($user), 'message' => 'Retrieved All successfully'], 200);
     }
 
     /**
@@ -154,11 +131,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id); 
+        $user = User::find($id);
         if ($user) {
             return new ApiResource($user);
         }
-        return "user Not found"; 
+        return "user Not found";
     }
 
     /**
@@ -171,45 +148,36 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->all();
-
+        $data['password'] = bcrypt($request->password);
         $validator = Validator::make($data, [
-            'password' => 'max:255',
-            'role_id' => 'max:255|numeric',
-            'email' => 'max:255|email',
-            'avatar' => 'max:255',
-            'fname' => 'max:255',
-            'lname' => 'max:255',
+            'role_id' => 'numeric',
+            'email' => 'email',
             'age' => 'numeric',
-            'gender' => 'max:255',
             'height' => 'numeric',
             'weight' => 'numeric',
             'neck_size' => 'numeric',
             'waist_size' => 'numeric',
             'hips' => 'numeric',
-            'goals' => 'max:255',
-            'activity' => 'max:255',
             'days_of_training' => 'numeric',
-            'training_type' => 'max:255',
             'Water' => 'numeric',
             'sleep_hours' => 'numeric',
             'fat' => 'numeric',
             'calorie' => 'numeric',
             'protein' => 'numeric',
             'volume' => 'numeric',
-            'status' => 'max:255',
         ]);
-        
 
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
-        
+
         $user->update($data);
 
         return response(['user' => new ApiResource($user), 'message' => 'Update User successfully'], 200);
     }
 
-  /**
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -225,72 +193,131 @@ class UserController extends Controller
         // return "Error while deleting";
     }
 
-            /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
     public function userFavorites()
     {
-        $userInfo=auth('api')->user();
+        $userInfo = auth('api')->user();
 
-        if ($userInfo!==null)
-        {
-        $articles = DB::table('users')
-            ->join('favorites', 'users.id', '=', 'favorites.user_id')
-            ->join('articles', 'favorites.favoritable_id', '=', 'articles.id')
-            ->where('favorites.favoritable_type', '=', 'App\Models\Article')
-            ->where('users.id', '=', $userInfo->id)
-            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'articles.id', 'articles.title', 'articles.thumbnail')
-            ->get();
+        if ($userInfo !== null) {
+            $articles = DB::table('users')
+                ->join('favorites', 'users.id', '=', 'favorites.user_id')
+                ->join('articles', 'favorites.favoritable_id', '=', 'articles.id')
+                ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+                ->where('users.id', '=', $userInfo->id)
+                ->select('users.social_id', 'users.name', 'favorites.favoritable_type', 'articles.id', 'articles.title', 'articles.thumbnail')
+                ->get();
 
-      
-        $videos = DB::table('users')
-            ->join('favorites', 'users.id', '=', 'favorites.user_id')
-            ->join('videos', 'favorites.favoritable_id', '=', 'videos.id')
-            ->where('favorites.favoritable_type', '=', 'App\Models\Video')
-            ->where('users.id', '=', $userInfo->id)
-            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'videos.id', 'videos.video_Name', 'videos.video_thumbnail')
-            ->get();
 
-        $recipes = DB::table('users')
-            ->join('favorites', 'users.id', '=', 'favorites.user_id')
-            ->join('recipes', 'favorites.favoritable_id', '=', 'recipes.id')
-            ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
-            ->where('users.id', '=', $userInfo->id)
-            ->select('users.social_id','users.name', 'favorites.favoritable_type', 'recipes.id', 'recipes.title', 'recipes.thumbnail')
-            ->get();
+            $videos = DB::table('users')
+                ->join('favorites', 'users.id', '=', 'favorites.user_id')
+                ->join('videos', 'favorites.favoritable_id', '=', 'videos.id')
+                // ->join('videocategoriespivots', 'videocategoriespivots.video_id', '=', 'videos.id')
+                // ->join('video_catagories', 'video_catagories.id', '=', 'videocategoriespivots.video_catagory_id')
+                ->where('favorites.favoritable_type', '=', 'App\Models\Video')
+                ->where('users.id', '=', $userInfo->id)
+                ->select('users.social_id', 'users.name', 'favorites.favoritable_type', 'videos.id', 'videos.video_Name', 'videos.video_thumbnail')
+                ->get();
 
-        $merged = $articles->merge($videos)->merge($recipes);
-        $result = $merged->all();
-       return new ApiResource($result);
-        }else{
+            $recipes = DB::table('users')
+                ->join('favorites', 'users.id', '=', 'favorites.user_id')
+                ->join('recipes', 'favorites.favoritable_id', '=', 'recipes.id')
+                ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
+                ->where('users.id', '=', $userInfo->id)
+                ->select('users.social_id', 'users.name', 'favorites.favoritable_type', 'recipes.id', 'recipes.title', 'recipes.thumbnail')
+                ->get();
+
+            $merged = $articles->merge($videos)->merge($recipes);
+            $result = $merged->all();
+            return new ApiResource($result);
+        } else {
             return "User is not logged in.";
         }
     }
 
-              /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
-    public function interesteds(Request $request)
+    public function AddInteresteds(Request $request)
     {
-        $userInfo=auth('api')->user();
-        if ($userInfo!==null)
-        {
-            $user = User::find($userInfo->id);	
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
+            $user = User::find($userInfo->id);
             $user->interesteds()->create([
                 'user_id' => $userInfo->id,
-                'functional_training' => 'true',
-                'power_training' => 'true',
-                'CrossFit' => 'true',
-                'yoga' => 'true',
-                'workouts' => 'true',
-                'cardio' => 'true',
+                'functional_training' => $request->functional_training,
+                'power_training' => $request->power_training,
+                'CrossFit' => $request->CrossFit,
+                'yoga' => $request->yoga,
+                'workouts' => $request->workouts,
+                'cardio' => $request->cardio,
             ]);
-            return "interesteds is added for user:".$userInfo->social_id;
-        }else{
+            return "interesteds is added for social id:" . $userInfo->social_id;
+        } else {
             return "User is not logged in.";
         }
     }
 
+        /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function UpdateInteresteds(Request $request)
+    {
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
+            $user = User::find($userInfo->id);
+            $user->interesteds()->update([
+                'functional_training' => $request->functional_training,
+                'power_training' => $request->power_training,
+                'CrossFit' => $request->CrossFit,
+                'yoga' => $request->yoga,
+                'workouts' => $request->workouts,
+                'cardio' => $request->cardio,
+            ]);
+            return "interesteds is Updated for social id:" . $userInfo->social_id;
+        } else {
+            return "User is not logged in.";
+        }
+    }
+
+        /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function DeleteInteresteds(Request $request)
+    {
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
+            $user = User::find($userInfo->id);
+            $user->interesteds()->delete();
+            return "interesteds is deleted for social id:" . $userInfo->social_id;
+        } else {
+            return "User is not logged in.";
+        }
+    }
+
+     /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function ShowInteresteds()
+    {
+        $userInfo = auth('api')->user();
+
+        if ($userInfo !== null) {
+            $interesteds = DB::table('users')
+                ->join('interesteds', 'users.id', '=', 'interesteds.user_id')
+                ->where('users.id', '=', $userInfo->id)
+                ->select('users.social_id', 'interesteds.*')
+                ->get();
+
+            return new ApiResource($interesteds);
+        } else {
+            return "User is not logged in.";
+        }
+    }
 }
