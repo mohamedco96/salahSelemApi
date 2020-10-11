@@ -62,8 +62,5 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasMany(Interested::class);
     }
 
-    public function scopeActive($query)
-    {
-        return $query->where('id', 89);
-    }
+    
 }

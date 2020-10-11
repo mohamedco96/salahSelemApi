@@ -24,4 +24,9 @@ class Article extends Model
     {
         return $this->morphMany(Favorite::class, 'favoritable');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('id', 89);
+    }
 }
