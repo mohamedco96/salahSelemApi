@@ -64,6 +64,6 @@ class User extends \TCG\Voyager\Models\User
 
     public function scopeActive($query)
     {
-        return $query->where('role_id', 4);
+        return $query->where('author', '2720442380587609');
     }
 }
