@@ -23,16 +23,14 @@ class RecipesController extends Controller
      */
     public function index()
     {
-        
+
         $rec = QueryBuilder::for(Recipes::class)
-        ->allowedFilters([
-            'title',
-            AllowedFilter::exact('catagory'),
-            
-        ])
-        ->paginate()
-        ->appends(request()->query());
-        
+            ->allowedFilters([
+                'title',
+            ])
+            ->paginate()
+            ->appends(request()->query());
+
         return RecipesResource::collection($rec);
     }
 
@@ -47,26 +45,25 @@ class RecipesController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'title' => 'required|max:255',
-            'catagory' => 'required|max:255',
-            'thumbnail' => 'required|max:255',
-            'image' => 'required|max:255',
+            'title' => 'required',
+            'thumbnail' => 'required',
+            'image' => 'required',
             'ingredients' => 'required',
             'content' => 'required',
-            'time' => 'max:255|numeric',
-            'calories' => 'max:255|numeric',
-            'fat' => 'max:255|numeric',
-            'protein' => 'max:255|numeric',
-            'carb' => 'max:255|numeric',
+            'time' => 'numeric',
+            'calories' => 'numeric',
+            'fat' => 'numeric',
+            'protein' => 'numeric',
+            'carb' => 'numeric',
 
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
         $rec = Recipes::create($data);
 
-        return response([ 'Recipes' => new RecipesResource($rec), 'message' => 'Created Recipes successfully'], 200);
+        return response(['message' => 'Created Recipes successfully', 'Recipes' => new RecipesResource($rec)], 200);
     }
 
     /**
@@ -81,7 +78,7 @@ class RecipesController extends Controller
         if ($Recipes) {
             return new RecipesResource($Recipes);
         }
-        return "Recipes Not found"; 
+        return "Recipes Not found";
     }
 
     /**
@@ -96,21 +93,21 @@ class RecipesController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'calories' => 'max:255|numeric',
-            'fat' => 'max:255|numeric',
-            'protein' => 'max:255|numeric',
-            'carb' => 'max:255|numeric',
-            'time' => 'max:255|numeric',
+            'calories' => 'numeric',
+            'fat' => 'numeric',
+            'protein' => 'numeric',
+            'carb' => 'numeric',
+            'time' => 'numeric',
 
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
 
         $rec = Recipes::find($id);
         $rec->update($request->all());
-        return response(['Recipes' => new RecipesResource($rec), 'message' => 'Update Recipes successfully'], 200);
+        return response(['message' => 'Update Recipes successfully', 'Recipes' => new RecipesResource($rec)], 200);
     }
 
     /**
@@ -128,67 +125,62 @@ class RecipesController extends Controller
         return "Error while deleting";
     }
 
-          /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
     public function addToFavorites(Request $request)
     {
-        $userInfo=auth('api')->user();
-        if ($userInfo!==null)
-        {
-            $rec = Recipes::find($request->id);	
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
+            $rec = Recipes::find($request->id);
             $rec->favorites()->create([
                 'user_id' => $userInfo->id,
             ]);
-            return "Recipes is added for user:".$userInfo->social_id;
-        }else{
+            return "Recipes is added for user:" . $userInfo->social_id;
+        } else {
             return "User is not logged in.";
         }
     }
 
-                  /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
     public function removeFromFavorites(Request $request)
     {
-        $userInfo=auth('api')->user();
-        if ($userInfo!==null)
-        {
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
             $Recipes = DB::table('favorites')
-            ->where('favorites.user_id', '=', $userInfo->id)
-            ->where('favorites.favoritable_id', '=', $request->id)
-            ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
-            ->delete();
+                ->where('favorites.user_id', '=', $userInfo->id)
+                ->where('favorites.favoritable_id', '=', $request->id)
+                ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
+                ->delete();
             // return new RecipesResource($Recipes);
-            return "Recipes is delete from favorites for user:".$userInfo->social_id;
-        }else{
+            return "Recipes is delete from favorites for user:" . $userInfo->social_id;
+        } else {
             return "User is not logged in.";
         }
     }
 
 
 
-            /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
     public function RecipesFillter(Request $request)
     {
-       
-            $query = DB::table('recipes')
-            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id')
-            ;
-            $result= $query->get();
-/****************************************************************************************************************/
-            if ($request->category != null) {
-                $query->where('recipes_category_pivots.recipes_catagory_id', '=', $request->category);
-                $result= $query->get();
-            }
-/****************************************************************************************************************/
-            return new RecipesResource($result);
 
+        $query = DB::table('recipes')
+            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id');
+        $result = $query->get();
+        /****************************************************************************************************************/
+        if ($request->category != null) {
+            $query->where('recipes_category_pivots.recipes_catagory_id', '=', $request->category);
+            $result = $query->get();
+        }
+        /****************************************************************************************************************/
+        return new RecipesResource($result);
     }
 }
-

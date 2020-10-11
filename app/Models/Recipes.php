@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Recipes extends Model
 {
     use HasFactory;
-          /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['title', 'catagory', 'thumbnail', 'image','content', 'calories', 'fat', 
-                            'protein', 'carb', 'time', 'ingredients'];
+    protected $fillable = [
+        'title', 'thumbnail', 'image', 'content', 'calories', 'fat',
+        'protein', 'carb', 'time', 'ingredients'
+    ];
 
-       /**
+    /**
      * Relationship: Favorite
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
