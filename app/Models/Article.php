@@ -13,7 +13,7 @@ class Article extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'author', 'catagory', 'tag','thumbnail', 'image', 'content'];
+    protected $fillable = ['title', 'author','thumbnail', 'image', 'content'];
 
      /**
      * Relationship: Favorite

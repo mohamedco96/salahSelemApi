@@ -23,18 +23,16 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        
+
         $art = QueryBuilder::for(Article::class)
-        ->allowedFilters([
-            'title',
-            AllowedFilter::exact('author'),
-            AllowedFilter::exact('catagory'),
-            AllowedFilter::exact('tag'),
-        ])
-        ->allowedSorts('created_at')
-        ->paginate()
-        ->appends(request()->query());
-        
+            ->allowedFilters([
+                'title',
+                AllowedFilter::exact('author'),
+            ])
+            ->allowedSorts('created_at')
+            ->paginate()
+            ->appends(request()->query());
+
         return ArticlesResource::collection($art);
     }
 
@@ -49,21 +47,19 @@ class ArticlesController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'title' => 'required|max:255',
-            'author' => 'required|max:255',
-            'catagory' => 'required|max:255',
-            'tag' => 'required|max:255',
-            'thumbnail' => 'required|max:255',
-            'image' => 'required|max:255',
+            'title' => 'required',
+            'author' => 'required',
+            'thumbnail' => 'required',
+            'image' => 'required',
             'content' => 'required',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
         $art = Article::create($data);
 
-        return response([ 'Article' => new ArticlesResource($art), 'message' => 'Created arteo Catagory successfully'], 200);
+        return response(['message' => 'Created arteo Catagory successfully', 'Article' => new ArticlesResource($art)], 200);
     }
 
     /**
@@ -78,7 +74,7 @@ class ArticlesController extends Controller
         if ($Article) {
             return new ArticlesResource($Article);
         }
-        return "Article Not found"; 
+        return "Article Not found";
     }
 
     /**
@@ -92,7 +88,7 @@ class ArticlesController extends Controller
     {
         $art = Article::find($id);
         $art->update($request->all());
-        return response(['Article' => new ArticlesResource($art), 'message' => 'Update Article successfully'], 200);
+        return response(['message' => 'Update Article successfully', 'Article' => new ArticlesResource($art)], 200);
     }
 
     /**
@@ -102,7 +98,7 @@ class ArticlesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    
+
     {
         $art = Article::findOrfail($id);
         if ($art->delete()) {
@@ -111,21 +107,20 @@ class ArticlesController extends Controller
         return "Error while deleting";
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
     public function addToFavorites(Request $request)
     {
-        $userInfo=auth('api')->user();
-        if ($userInfo!==null)
-        {
-            $article = Article::find($request->id);	
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
+            $article = Article::find($request->id);
             $article->favorites()->create([
                 'user_id' => $userInfo->id,
             ]);
-            return "Article is added for user:".$userInfo->social_id;
-        }else{
+            return "Article is added for user:" . $userInfo->social_id;
+        } else {
             return "User is not logged in.";
         }
     }
@@ -133,52 +128,47 @@ class ArticlesController extends Controller
     /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
-    */
+     */
     public function removeFromFavorites(Request $request)
     {
-        $userInfo=auth('api')->user();
-        if ($userInfo!==null)
-        {
+        $userInfo = auth('api')->user();
+        if ($userInfo !== null) {
             $Article = DB::table('favorites')
-            ->where('favorites.user_id', '=', $userInfo->id)
-            ->where('favorites.favoritable_id', '=', $request->id)
-            ->where('favorites.favoritable_type', '=', 'App\Models\Article')
-            ->delete();
+                ->where('favorites.user_id', '=', $userInfo->id)
+                ->where('favorites.favoritable_id', '=', $request->id)
+                ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+                ->delete();
             // return new ArticlesResource($Article);
-            return "Article is delete from favorites for user:".$userInfo->social_id;
-        }else{
+            return "Article is delete from favorites for user:" . $userInfo->social_id;
+        } else {
             return "User is not logged in.";
         }
     }
 
 
 
-            /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
     public function articleFillter(Request $request)
     {
-       
-            $query = DB::table('articles')
+
+        $query = DB::table('articles')
             ->join('articles_catagory_pivots', 'articles.id', '=', 'articles_catagory_pivots.article_id')
-            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id')
-            ;
-            $result= $query->get();
-/****************************************************************************************************************/
-            if ($request->category != null) {
-                $query->where('articles_catagory_pivots.articles_catagory_id', '=', $request->category);
-                $result= $query->get();
-            }
+            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id');
+        $result = $query->get();
+        /****************************************************************************************************************/
+        if ($request->category != null) {
+            $query->where('articles_catagory_pivots.articles_catagory_id', '=', $request->category);
+            $result = $query->get();
+        }
 
-            if ($request->tag != null) {
-                $query->where('article_tag_pivots.article_tag_id', '=', $request->tag);
-                $result= $query->get();
-            }
-/****************************************************************************************************************/
-            return new ArticlesResource($result);
-
+        if ($request->tag != null) {
+            $query->where('article_tag_pivots.article_tag_id', '=', $request->tag);
+            $result = $query->get();
+        }
+        /****************************************************************************************************************/
+        return new ArticlesResource($result);
     }
-    
 }
-
