@@ -36,15 +36,17 @@ class UserController extends Controller
             $data['password'] = bcrypt($request->password);
             $user = User::create($data);
             $accessToken = $user->createToken('authToken')->accessToken;
-            return response(['message' => 'Register successfully','user' => $user, 'access_token' => $accessToken]);
+            $user->access_token = $accessToken;
+            $user->update();
+            return response(['message' => 'Register successfully', 'user' => $user, 'access_token' => $accessToken]);
         }
 
         //login
-        $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
         $user = User::find(auth()->user()->id);
         $user->status = 'online';
         $user->update();
-        return response(['message' => 'Login successfully','user' => auth()->user(), 'access_token' => $accessToken]);
+        return response(['message' => 'Login successfully', 'user' => auth()->user(), 'access_token' => $user->access_token]);
     }
 
     public function logout(Request $request)
@@ -261,7 +263,7 @@ class UserController extends Controller
         }
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
@@ -284,7 +286,7 @@ class UserController extends Controller
         }
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
@@ -300,7 +302,7 @@ class UserController extends Controller
         }
     }
 
-     /**
+    /**
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
@@ -319,5 +321,19 @@ class UserController extends Controller
         } else {
             return "User is not logged in.";
         }
+    }
+
+
+    /**
+     * Get the access token instance for the parsed response.
+     *
+     * @param  array  $response
+     * @return Token
+     */
+    protected function findAccessToken(array $response)
+    {
+        return $this->tokens->find(
+            $this->jwt->parse($response['access_token'])->getClaim('jti')
+        );
     }
 }

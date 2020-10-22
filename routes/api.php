@@ -40,6 +40,9 @@ use App\Http\Controllers\promocodeController;
     Route::post('/v1/user/updateinteresteds', [UserController::class, 'UpdateInteresteds']);
     Route::post('/v1/user/deleteinteresteds', [UserController::class, 'DeleteInteresteds']);
     Route::post('/v1/user/showinteresteds', [UserController::class, 'ShowInteresteds']);
+
+    Route::post('/v1/user/findAccessToken', [UserController::class, 'findAccessToken']);
+
 /*************************************************************************************************************************/
 
 /*************************************************************************************************************************/
