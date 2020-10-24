@@ -173,14 +173,17 @@ class RecipesController extends Controller
     {
 
         $query = DB::table('recipes')
-            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id');
-        $result = $query->get();
-        /****************************************************************************************************************/
+            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id')
+            ->join('recipes_catagories', 'recipes_catagories.id', '=', 'recipes_category_pivots.recipes_catagory_id')
+            ->select('recipes.*', 'recipes_catagories.name AS categorie_name');
+
+            $result= $query->groupBy('id')->get();     
+/****************************************************************************************************************/
         if ($request->category != null) {
             $query->where('recipes_category_pivots.recipes_catagory_id', '=', $request->category);
-            $result = $query->get();
-        }
-        /****************************************************************************************************************/
+            $result= $query->groupBy('id')->get();     
+           }
+/****************************************************************************************************************/
         return new RecipesResource($result);
     }
 }
