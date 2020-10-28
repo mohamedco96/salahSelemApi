@@ -2,6 +2,15 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [9.2.1] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\CodeCoverage\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [9.2.0] - 2020-10-02
 
 ### Added
@@ -288,6 +297,10 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 * Class names are now abbreviated (unqualified name shown, fully qualified name shown on hover) in the file view of the HTML report
 * Update HTML report to Bootstrap 4
 
+<<<<<<< HEAD
+=======
+[9.2.1]: https://github.com/sebastianbergmann/php-code-coverage/compare/9.2.0...9.2.1
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [9.2.0]: https://github.com/sebastianbergmann/php-code-coverage/compare/9.1.11...9.2.0
 [9.1.11]: https://github.com/sebastianbergmann/php-code-coverage/compare/9.1.10...9.1.11
 [9.1.10]: https://github.com/sebastianbergmann/php-code-coverage/compare/9.1.9...9.1.10

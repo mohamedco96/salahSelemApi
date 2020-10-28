@@ -2,6 +2,15 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [5.0.3] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\Timer\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [5.0.2] - 2020-09-28
 
 ### Changed
@@ -115,6 +124,10 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * This component is no longer supported on PHP 5.3, PHP 5.4, PHP 5.5, PHP 5.6, and PHP 7.0
 
+<<<<<<< HEAD
+=======
+[5.0.3]: https://github.com/sebastianbergmann/php-timer/compare/5.0.2...5.0.3
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [5.0.2]: https://github.com/sebastianbergmann/php-timer/compare/5.0.1...5.0.2
 [5.0.1]: https://github.com/sebastianbergmann/php-timer/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/sebastianbergmann/php-timer/compare/4.0.0...5.0.0

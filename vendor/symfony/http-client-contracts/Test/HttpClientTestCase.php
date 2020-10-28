@@ -860,6 +860,21 @@ abstract class HttpClientTestCase extends TestCase
         }
     }
 
+<<<<<<< HEAD
+=======
+    public function testGetEncodedContentAfterDestruct()
+    {
+        $client = $this->getHttpClient(__FUNCTION__);
+
+        try {
+            $client->request('GET', 'http://localhost:8057/404-gzipped');
+            $this->fail(ClientExceptionInterface::class.' expected');
+        } catch (ClientExceptionInterface $e) {
+            $this->assertSame('some text', $e->getResponse()->getContent(false));
+        }
+    }
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
     public function testProxy()
     {
         $client = $this->getHttpClient(__FUNCTION__);

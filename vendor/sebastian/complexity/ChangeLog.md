@@ -2,6 +2,15 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [2.0.2] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\Complexity\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [2.0.1] - 2020-09-28
 
 ### Changed
@@ -18,6 +27,10 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * Initial release
 
+<<<<<<< HEAD
+=======
+[2.0.2]: https://github.com/sebastianbergmann/complexity/compare/2.0.1...2.0.2
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [2.0.1]: https://github.com/sebastianbergmann/complexity/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/sebastianbergmann/complexity/compare/1.0.0...2.0.0
 [1.0.0]: https://github.com/sebastianbergmann/complexity/compare/70ee0ad32d9e2be3f85beffa3e2eb474193f2487...1.0.0

@@ -4,6 +4,10 @@ namespace Illuminate\Console\Scheduling;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+<<<<<<< HEAD
+=======
+use Symfony\Component\Process\Process;
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 
 class ScheduleWorkCommand extends Command
 {
@@ -30,12 +34,47 @@ class ScheduleWorkCommand extends Command
     {
         $this->info('Schedule worker started successfully.');
 
+<<<<<<< HEAD
         while (true) {
             if (Carbon::now()->second === 0) {
                 $this->call('schedule:run');
             }
 
             sleep(1);
+=======
+        [$lastExecutionStartedAt, $keyOfLastExecutionWithOutput, $executions] = [null, null, []];
+
+        while (true) {
+            usleep(100 * 1000);
+
+            if (Carbon::now()->second === 0 &&
+                ! Carbon::now()->startOfMinute()->equalTo($lastExecutionStartedAt)) {
+                $executions[] = $execution = new Process([PHP_BINARY, 'artisan', 'schedule:run']);
+
+                $execution->start();
+
+                $lastExecutionStartedAt = Carbon::now()->startOfMinute();
+            }
+
+            foreach ($executions as $key => $execution) {
+                $output = trim($execution->getIncrementalOutput()).
+                          trim($execution->getIncrementalErrorOutput());
+
+                if (! empty($output)) {
+                    if ($key !== $keyOfLastExecutionWithOutput) {
+                        $this->info(PHP_EOL.'Execution #'.($key + 1).' output:');
+
+                        $keyOfLastExecutionWithOutput = $key;
+                    }
+
+                    $this->output->writeln($output);
+                }
+
+                if (! $execution->isRunning()) {
+                    unset($executions[$key]);
+                }
+            }
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
         }
     }
 }

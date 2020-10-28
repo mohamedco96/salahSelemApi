@@ -2,6 +2,15 @@
 
 All notable changes to `sebastianbergmann/object-reflector` are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [2.0.4] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\ObjectReflector\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [2.0.3] - 2020-09-28
 
 ### Changed
@@ -40,6 +49,10 @@ All notable changes to `sebastianbergmann/object-reflector` are documented in th
 
 * Initial release
 
+<<<<<<< HEAD
+=======
+[2.0.4]: https://github.com/sebastianbergmann/object-reflector/compare/2.0.3...2.0.4
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [2.0.3]: https://github.com/sebastianbergmann/object-reflector/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/sebastianbergmann/object-reflector/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/sebastianbergmann/object-reflector/compare/2.0.0...2.0.1

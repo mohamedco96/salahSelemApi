@@ -39,6 +39,10 @@ use Facade\Ignition\SolutionProviders\MergeConflictSolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingAppKeySolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingColumnSolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingImportSolutionProvider;
+<<<<<<< HEAD
+=======
+use Facade\Ignition\SolutionProviders\MissingLivewireComponentSolutionProvider;
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 use Facade\Ignition\SolutionProviders\MissingMixManifestSolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingPackageSolutionProvider;
 use Facade\Ignition\SolutionProviders\RunningLaravelDuskInProductionProvider;
@@ -373,6 +377,10 @@ class IgnitionServiceProvider extends ServiceProvider
             UnknownValidationSolutionProvider::class,
             UndefinedPropertySolutionProvider::class,
             MissingMixManifestSolutionProvider::class,
+<<<<<<< HEAD
+=======
+            MissingLivewireComponentSolutionProvider::class,
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
         ];
     }
 

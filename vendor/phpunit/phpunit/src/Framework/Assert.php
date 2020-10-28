@@ -430,6 +430,18 @@ abstract class Assert
     }
 
     /**
+     * @throws ExpectationFailedException
+     */
+    public static function assertObjectEquals(object $expected, object $actual, string $method = 'equals', string $message = ''): void
+    {
+        static::assertThat(
+            $actual,
+            static::objectEquals($expected, $method),
+            $message
+        );
+    }
+
+    /**
      * Asserts that a variable is empty.
      *
      * @throws ExpectationFailedException

@@ -132,7 +132,11 @@ final class Cobertura
                 $classElement = $document->createElement('class');
 
                 $classElement->setAttribute('name', $className);
+<<<<<<< HEAD
                 $classElement->setAttribute('filename', str_replace($report->pathAsString() . '/', '', $item->pathAsString()));
+=======
+                $classElement->setAttribute('filename', str_replace($report->pathAsString() . DIRECTORY_SEPARATOR, '', $item->pathAsString()));
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
                 $classElement->setAttribute('line-rate', (string) $lineRate);
                 $classElement->setAttribute('branch-rate', (string) $branchRate);
                 $classElement->setAttribute('complexity', (string) $class['ccn']);
@@ -206,7 +210,11 @@ final class Cobertura
 
             $classElement = $document->createElement('class');
             $classElement->setAttribute('name', basename($item->pathAsString()));
+<<<<<<< HEAD
             $classElement->setAttribute('filename', str_replace($report->pathAsString() . '/', '', $item->pathAsString()));
+=======
+            $classElement->setAttribute('filename', str_replace($report->pathAsString() . DIRECTORY_SEPARATOR, '', $item->pathAsString()));
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 
             $methodsElement = $document->createElement('methods');
 

@@ -2,6 +2,15 @@
 
 All notable changes to `sebastianbergmann/object-enumerator` are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [4.0.4] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\ObjectEnumerator\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [4.0.3] - 2020-09-28
 
 ### Changed
@@ -68,6 +77,10 @@ All notable changes to `sebastianbergmann/object-enumerator` are documented in t
 
 * Initial release
 
+<<<<<<< HEAD
+=======
+[4.0.4]: https://github.com/sebastianbergmann/object-enumerator/compare/4.0.3...4.0.4
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [4.0.3]: https://github.com/sebastianbergmann/object-enumerator/compare/4.0.2...4.0.3
 [4.0.2]: https://github.com/sebastianbergmann/object-enumerator/compare/4.0.1...4.0.2
 [4.0.1]: https://github.com/sebastianbergmann/object-enumerator/compare/4.0.0...4.0.1

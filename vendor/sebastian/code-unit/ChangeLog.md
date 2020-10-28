@@ -2,6 +2,15 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [1.0.8] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\CodeUnit\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [1.0.7] - 2020-10-02
 
 ### Fixed
@@ -48,6 +57,10 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * Initial release
 
+<<<<<<< HEAD
+=======
+[1.0.8]: https://github.com/sebastianbergmann/code-unit/compare/1.0.7...1.0.8
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [1.0.7]: https://github.com/sebastianbergmann/code-unit/compare/1.0.6...1.0.7
 [1.0.6]: https://github.com/sebastianbergmann/code-unit/compare/1.0.5...1.0.6
 [1.0.5]: https://github.com/sebastianbergmann/code-unit/compare/1.0.4...1.0.5

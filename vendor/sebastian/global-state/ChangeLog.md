@@ -2,6 +2,15 @@
 
 All notable changes in `sebastian/global-state` are documented in this file using the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [5.0.2] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\GlobalState\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [5.0.1] - 2020-09-28
 
 ### Changed
@@ -30,6 +39,10 @@ All notable changes in `sebastian/global-state` are documented in this file usin
 
 * This component is no longer supported on PHP 7.0 and PHP 7.1
 
+<<<<<<< HEAD
+=======
+[5.0.2]: https://github.com/sebastianbergmann/global-state/compare/5.0.1...5.0.2
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [5.0.1]: https://github.com/sebastianbergmann/global-state/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/sebastianbergmann/global-state/compare/4.0.0...5.0.0
 [4.0.0]: https://github.com/sebastianbergmann/global-state/compare/3.0.0...4.0.0

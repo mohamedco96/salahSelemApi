@@ -33,7 +33,11 @@ class Application extends Container implements ApplicationContract, CachesConfig
      *
      * @var string
      */
+<<<<<<< HEAD
     const VERSION = '8.9.0';
+=======
+    const VERSION = '8.11.2';
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 
     /**
      * The base path for the Laravel installation.
@@ -150,7 +154,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
     /**
      * The prefixes of absolute cache paths for use during normalization.
      *
-     * @var array
+     * @var string[]
      */
     protected $absoluteCachePathPrefixes = ['/', '\\'];
 

@@ -21,6 +21,7 @@ use Composer\Package\Version\VersionParser;
 use Composer\Util\Platform;
 use Composer\Util\ProcessExecutor;
 use Composer\Util\Filesystem;
+use Composer\Util\Url;
 use Composer\Util\Git as GitUtil;
 
 /**
@@ -117,6 +118,11 @@ class PathRepository extends ArrayRepository implements ConfigurableRepositoryIn
         parent::__construct();
     }
 
+    public function getRepoName()
+    {
+        return 'path repo ('.Url::sanitize($this->repoConfig['url']).')';
+    }
+
     public function getRepoConfig()
     {
         return $this->repoConfig;
@@ -167,7 +173,11 @@ class PathRepository extends ArrayRepository implements ConfigurableRepositoryIn
 
             // use the branch-version as the package version if available
             if (!isset($package['version']) && isset($package['extra']['branch-version'])) {
+<<<<<<< HEAD
                 $package['version'] = preg_replace('{(\.x)?(-dev)?$}', '.x-dev', $package['extra']['branch-version']);
+=======
+                $package['version'] = preg_replace('{(\.x)?(-dev)?$}', '', $package['extra']['branch-version']).'.x-dev';
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
             }
 
             // carry over the root package version if this path repo is in the same git repository as root package

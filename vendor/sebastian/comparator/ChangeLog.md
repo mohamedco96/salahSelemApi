@@ -2,6 +2,15 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+<<<<<<< HEAD
+=======
+## [4.0.6] - 2020-10-26
+
+### Fixed
+
+* `SebastianBergmann\Comparator\Exception` now correctly extends `\Throwable`
+
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 ## [4.0.5] - 2020-09-30
 
 ### Fixed
@@ -86,6 +95,10 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 * Added `SebastianBergmann\Comparator\Factory::reset()` to unregister all non-default comparators
 * Added support for `phpunit/phpunit-mock-objects` version `^5.0`
 
+<<<<<<< HEAD
+=======
+[4.0.6]: https://github.com/sebastianbergmann/comparator/compare/4.0.5...4.0.6
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
 [4.0.5]: https://github.com/sebastianbergmann/comparator/compare/4.0.4...4.0.5
 [4.0.4]: https://github.com/sebastianbergmann/comparator/compare/4.0.3...4.0.4
 [4.0.3]: https://github.com/sebastianbergmann/comparator/compare/4.0.2...4.0.3

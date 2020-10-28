@@ -4,6 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+<<<<<<< HEAD
+=======
+    resolveFromConfigFile="false"
+>>>>>>> debd9b70d39a6a20c58c85b25d0b520131b33144
     errorBaseline=".psalm/baseline.xml"
 >
     <projectFiles>
