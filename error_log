@@ -1,0 +1,4 @@
+[28-Oct-2020 16:59:40 UTC] PHP Parse error:  syntax error, unexpected '<<' (T_SL), expecting ')' in /home/salahsel/public_html/sportivapp/api/vendor/composer/autoload_static.php on line 1782
+[28-Oct-2020 17:00:16 UTC] PHP Parse error:  syntax error, unexpected '<<' (T_SL), expecting ')' in /home/salahsel/public_html/sportivapp/api/vendor/composer/autoload_static.php on line 1782
+[28-Oct-2020 17:05:47 UTC] PHP Parse error:  syntax error, unexpected '<<' (T_SL), expecting ')' in /home/salahsel/public_html/sportivapp/api/vendor/composer/autoload_static.php on line 1782
+[28-Oct-2020 17:38:29 UTC] PHP Parse error:  syntax error, unexpected '<<' (T_SL), expecting ')' in /home/salahsel/public_html/sportivapp/api/vendor/composer/autoload_static.php on line 1782
