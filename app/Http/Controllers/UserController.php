@@ -97,8 +97,10 @@ class UserController extends Controller
         }
 
         $User = User::create($data);
-
-        return response(['message' => 'Created User successfully', 'user' => new ApiResource($User)], 200);
+        $accessToken = $User->createToken('authToken')->accessToken;
+        $User->access_token = $accessToken;
+        $User->update();
+        return response(['message' => 'Created User successfully', 'user' => new ApiResource($User), 'access_token' => $User->access_token], 200);
     }
 
 
@@ -324,16 +326,4 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Get the access token instance for the parsed response.
-     *
-     * @param  array  $response
-     * @return Token
-     */
-    protected function findAccessToken(array $response)
-    {
-        return $this->tokens->find(
-            $this->jwt->parse($response['access_token'])->getClaim('jti')
-        );
-    }
 }

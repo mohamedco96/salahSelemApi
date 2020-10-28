@@ -156,19 +156,24 @@ class ArticlesController extends Controller
 
         $query = DB::table('articles')
             ->join('articles_catagory_pivots', 'articles.id', '=', 'articles_catagory_pivots.article_id')
-            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id');
-        $result = $query->get();
-        /****************************************************************************************************************/
+            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id')
+
+            ->join('articles_catagories', 'articles_catagories.id', '=', 'articles_catagory_pivots.articles_catagory_id')
+            ->join('article_tags', 'article_tags.id', '=', 'article_tag_pivots.article_tag_id')
+
+            ->select('articles.*', 'articles_catagories.name AS categorie_name', 'article_tags.name AS tag_name');
+            $result= $query->groupBy('id')->get(); 
+/****************************************************************************************************************/
         if ($request->category != null) {
             $query->where('articles_catagory_pivots.articles_catagory_id', '=', $request->category);
-            $result = $query->get();
+            $result= $query->groupBy('id')->get();
         }
 
         if ($request->tag != null) {
             $query->where('article_tag_pivots.article_tag_id', '=', $request->tag);
-            $result = $query->get();
+            $result= $query->groupBy('id')->get();
         }
-        /****************************************************************************************************************/
+/****************************************************************************************************************/
         return new ArticlesResource($result);
     }
 }
