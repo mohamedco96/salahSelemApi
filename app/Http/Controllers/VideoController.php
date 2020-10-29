@@ -158,228 +158,84 @@ class VideoController extends Controller
                 ->join('videocategoriespivots', 'videos.id', '=', 'videocategoriespivots.video_id')
                 ->join('video_type_pivots', 'videos.id', '=', 'video_type_pivots.video_id')
                 ->join('video_tag_pivots', 'videos.id', '=', 'video_tag_pivots.video_id')
-                ->join('muscle_pivots', 'videos.id', '=', 'muscle_pivots.video_id');
+                ->join('muscle_pivots', 'videos.id', '=', 'muscle_pivots.video_id')
+
+                ->join('video_catagories', 'video_catagories.id', '=', 'videocategoriespivots.video_catagory_id')
+                ->join('video_types', 'video_types.id', '=', 'video_type_pivots.video_type_id')
+                ->join('video_tags', 'video_tags.id', '=', 'video_tag_pivots.video_tag_id')
+                ->join('muscles', 'muscles.id', '=', 'muscle_pivots.muscle_id')
+
+                ->where('muscle_pivots.muscle_id', '=', $request->muscle)
+                ->select('videos.*', 'video_catagories.name AS categorie_name', 'video_types.name AS type_name', 'video_tags.name AS tag_name', 'muscles.name AS muscle_name');
             // $result= $query->get();
             /****************************************************************************************************************/
             if ($interesteds[0]->functional_training == 'false') {
                 $query->where('video_catagory_id', '!=', '1');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($interesteds[0]->power_training == 'false') {
                 $query->where('video_catagory_id', '!=', '2');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($interesteds[0]->CrossFit == 'false') {
                 $query->where('video_catagory_id', '!=', '3');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($interesteds[0]->yoga == 'false') {
                 $query->where('video_catagory_id', '!=', '4');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($interesteds[0]->workouts == 'false') {
                 $query->where('video_catagory_id', '!=', '5');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($interesteds[0]->cardio == 'false') {
                 $query->where('video_catagory_id', '!=', '6');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
             /****************************************************************************************************************/
             if ($userInfo->training_type == 'home') {
                 $query->where('video_type_pivots.video_type_id', '=', '1');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($userInfo->training_type == 'gym') {
                 $query->where('video_type_pivots.video_type_id', '=', '2');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
             /****************************************************************************************************************/
             if ($userInfo->tag == 'weight') {
                 $query->where('video_tag_pivots.video_tag_id', '=', '1');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
             if ($userInfo->tag == 'no weight') {
                 $query->where('video_tag_pivots.video_tag_id', '=', '2');
-                $result = $query->get();
-            }
-            /****************************************************************************************************************/
-            if ($request->muscle == 'shoulders') {
-                $query->where('muscle_pivots.muscle_id', '=', '1');
-                $result = $query->get();
+                $result= $query->groupBy('id')->get();
             }
 
-            if ($request->muscle == 'chest') {
-                $query->where('muscle_pivots.muscle_id', '=', '2');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'biceps') {
-                $query->where('muscle_pivots.muscle_id', '=', '3');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'forearm') {
-                $query->where('muscle_pivots.muscle_id', '=', '4');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'abs') {
-                $query->where('muscle_pivots.muscle_id', '=', '5');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'obliques') {
-                $query->where('muscle_pivots.muscle_id', '=', '6');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'quads') {
-                $query->where('muscle_pivots.muscle_id', '=', '7');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'abductors') {
-                $query->where('muscle_pivots.muscle_id', '=', '8');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'adductors') {
-                $query->where('muscle_pivots.muscle_id', '=', '9');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'traps') {
-                $query->where('muscle_pivots.muscle_id', '=', '10');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'triceps') {
-                $query->where('muscle_pivots.muscle_id', '=', '11');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'lats') {
-                $query->where('muscle_pivots.muscle_id', '=', '12');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'lower back') {
-                $query->where('muscle_pivots.muscle_id', '=', '13');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'glutes') {
-                $query->where('muscle_pivots.muscle_id', '=', '14');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'hamstrings') {
-                $query->where('muscle_pivots.muscle_id', '=', '15');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'calves') {
-                $query->where('muscle_pivots.muscle_id', '=', '16');
-                $result = $query->get();
-            }
-            /****************************************************************************************************************/
             return new VideoResource($result);
         } else {
             $query = DB::table('videos')
                 ->join('videocategoriespivots', 'videos.id', '=', 'videocategoriespivots.video_id')
                 ->join('video_type_pivots', 'videos.id', '=', 'video_type_pivots.video_id')
                 ->join('video_tag_pivots', 'videos.id', '=', 'video_tag_pivots.video_id')
-                ->join('muscle_pivots', 'videos.id', '=', 'muscle_pivots.video_id');
-            $result= $query->get();
-            /****************************************************************************************************************/
-            if ($request->muscle == 'shoulders') {
-                $query->where('muscle_pivots.muscle_id', '=', '1');
-                $result = $query->get();
-            }
+                ->join('muscle_pivots', 'videos.id', '=', 'muscle_pivots.video_id')
 
-            if ($request->muscle == 'chest') {
-                $query->where('muscle_pivots.muscle_id', '=', '2');
-                $result = $query->get();
-            }
+                ->join('video_catagories', 'video_catagories.id', '=', 'videocategoriespivots.video_catagory_id')
+                ->join('video_types', 'video_types.id', '=', 'video_type_pivots.video_type_id')
+                ->join('video_tags', 'video_tags.id', '=', 'video_tag_pivots.video_tag_id')
+                ->join('muscles', 'muscles.id', '=', 'muscle_pivots.muscle_id')
 
-            if ($request->muscle == 'biceps') {
-                $query->where('muscle_pivots.muscle_id', '=', '3');
-                $result = $query->get();
-            }
+                ->where('muscle_pivots.muscle_id', '=', $request->muscle)
+                ->select('videos.*', 'video_catagories.name AS categorie_name', 'video_types.name AS type_name', 'video_tags.name AS tag_name', 'muscles.name AS muscle_name');
+                $result= $query->groupBy('id')->get();
 
-            if ($request->muscle == 'forearm') {
-                $query->where('muscle_pivots.muscle_id', '=', '4');
-                $result = $query->distinct('videos.id')->get();
-            }
-
-            if ($request->muscle == 'abs') {
-                $query->where('muscle_pivots.muscle_id', '=', '5');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'obliques') {
-                $query->where('muscle_pivots.muscle_id', '=', '6');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'quads') {
-                $query->where('muscle_pivots.muscle_id', '=', '7');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'abductors') {
-                $query->where('muscle_pivots.muscle_id', '=', '8');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'adductors') {
-                $query->where('muscle_pivots.muscle_id', '=', '9');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'traps') {
-                $query->where('muscle_pivots.muscle_id', '=', '10');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'triceps') {
-                $query->where('muscle_pivots.muscle_id', '=', '11');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'lats') {
-                $query->where('muscle_pivots.muscle_id', '=', '12');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'lower back') {
-                $query->where('muscle_pivots.muscle_id', '=', '13');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'glutes') {
-                $query->where('muscle_pivots.muscle_id', '=', '14');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'hamstrings') {
-                $query->where('muscle_pivots.muscle_id', '=', '15');
-                $result = $query->get();
-            }
-
-            if ($request->muscle == 'calves') {
-                $query->where('muscle_pivots.muscle_id', '=', '16');
-                $result = $query->get();
-            }
-            /****************************************************************************************************************/
             return new VideoResource($result);
         }
     }
