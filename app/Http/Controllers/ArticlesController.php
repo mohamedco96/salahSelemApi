@@ -23,6 +23,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
+        $userInfo = auth('api')->user();
 
         $art = QueryBuilder::for(Article::class)
             ->allowedFilters([
@@ -59,7 +60,7 @@ class ArticlesController extends Controller
         }
         $art = Article::create($data);
 
-        return response(['message' => 'Created arteo Catagory successfully', 'Article' => new ArticlesResource($art)], 200);
+        return response(['message' => 'Created Catagory successfully', 'Article' => new ArticlesResource($art)], 200);
     }
 
     /**
@@ -70,9 +71,24 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
+        $isfavorite;
+        $userInfo = auth('api')->user();
         $Article = Article::find($id);
+        
         if ($Article) {
-            return new ArticlesResource($Article);
+            $query = DB::table('articles')
+            ->join('favorites', 'articles.id', '=', 'favorites.favoritable_id')
+            ->where('favorites.favoritable_id', '=', $id)
+            ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+            ->where('favorites.user_id', '=', $userInfo->id)
+            ->select('articles.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->groupBy('articles.id')->get(); 
+            
+            if($query->isNotEmpty()){
+                return response(['isfavorite' => $isfavorite='true', 'Article' => new ArticlesResource($query)], 200);
+            }
+            
+            return response(['isfavorite' => $isfavorite='false', 'Article' => new ArticlesResource($Article)], 200);
         }
         return "Article Not found";
     }

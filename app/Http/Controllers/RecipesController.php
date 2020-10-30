@@ -74,11 +74,26 @@ class RecipesController extends Controller
      */
     public function show($id)
     {
-        $Recipes = Recipes::find($id);
-        if ($Recipes) {
-            return new RecipesResource($Recipes);
+        $isfavorite;
+        $userInfo = auth('api')->user();
+        $rec = Recipes::find($id);
+        
+        if ($rec) {
+            $query = DB::table('recipes')
+            ->join('favorites', 'recipes.id', '=', 'favorites.favoritable_id')
+            ->where('favorites.favoritable_id', '=', $id)
+            ->where('favorites.favoritable_type', '=', 'App\Models\Video')
+            ->where('favorites.user_id', '=', $userInfo->id)
+            ->select('recipes.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->groupBy('recipes.id')->get(); 
+            
+            if($query->isNotEmpty()){
+                return response(['isfavorite' => $isfavorite='true', 'Recipes' => new RecipesResource($query)], 200);
+            }
+            
+            return response(['isfavorite' => $isfavorite='false', 'Recipes' => new RecipesResource($rec)], 200);
         }
-        return "Recipes Not found";
+        return "Recipes Not found";;
     }
 
     /**
@@ -132,6 +147,7 @@ class RecipesController extends Controller
     public function addToFavorites(Request $request)
     {
         $userInfo = auth('api')->user();
+        
         if ($userInfo !== null) {
             $rec = Recipes::find($request->id);
             $rec->favorites()->create([

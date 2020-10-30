@@ -18,7 +18,7 @@ class Recipes extends Model
         'protein', 'carb', 'time', 'ingredients'
     ];
 
-    /**
+      /**
      * Relationship: Favorite
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

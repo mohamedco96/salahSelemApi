@@ -33,20 +33,22 @@ class UserController extends Controller
         }
         // register
         if (!auth()->attempt($data)) {
-            $data['password'] = bcrypt($request->password);
+            // $data['password'] = bcrypt($request->password);
             $user = User::create($data);
             $accessToken = $user->createToken('authToken')->accessToken;
             $user->access_token = $accessToken;
             $user->update();
             return response(['message' => 'Register successfully', 'user' => $user, 'access_token' => $accessToken]);
-        }
-
-        //login
+        }else{
+            //login
         // $accessToken = auth()->user()->createToken('authToken')->accessToken;
         $user = User::find(auth()->user()->id);
         $user->status = 'online';
         $user->update();
         return response(['message' => 'Login successfully', 'user' => auth()->user(), 'access_token' => $user->access_token]);
+        }
+
+        
     }
 
     public function logout(Request $request)
@@ -71,7 +73,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['password'] = bcrypt($request->password);
+        // $data['password'] = bcrypt($request->password);
         $validator = Validator::make($data, [
             'social_id' => 'required|unique:users',
             'password' => 'required',
@@ -152,7 +154,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->all();
-        $data['password'] = bcrypt($request->password);
+        // $data['password'] = bcrypt($request->password);
         $validator = Validator::make($data, [
             'role_id' => 'numeric',
             'email' => 'email',

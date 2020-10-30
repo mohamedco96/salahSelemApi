@@ -65,11 +65,26 @@ class VideoController extends Controller
      */
     public function show($id)
     {
-        $Video = Video::find($id);
-        if ($Video) {
-            return new VideoResource($Video);
+        $isfavorite;
+        $userInfo = auth('api')->user();
+        $vid = Video::find($id);
+        
+        if ($vid) {
+            $query = DB::table('videos')
+            ->join('favorites', 'videos.id', '=', 'favorites.favoritable_id')
+            ->where('favorites.favoritable_id', '=', $id)
+            ->where('favorites.favoritable_type', '=', 'App\Models\Video')
+            ->where('favorites.user_id', '=', $userInfo->id)
+            ->select('videos.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->groupBy('videos.id')->get(); 
+            
+            if($query->isNotEmpty()){
+                return response(['isfavorite' => $isfavorite='true', 'Video' => new VideoResource($query)], 200);
+            }
+            
+            return response(['isfavorite' => $isfavorite='false', 'Video' => new VideoResource($vid)], 200);
         }
-        return "Video Not found";
+        return "Video Not found";;
     }
 
     /**
