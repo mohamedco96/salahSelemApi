@@ -31,9 +31,13 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
+        
+        $query = DB::table('users')
+        ->where('users.social_id', '=', $request->social_id)
+        ->get();
         // register
-        if (!auth()->attempt($data)) {
-            // $data['password'] = bcrypt($request->password);
+        if($query->isEmpty()){
+            $data['password'] = bcrypt($request->password);
             $user = User::create($data);
             $accessToken = $user->createToken('authToken')->accessToken;
             $user->access_token = $accessToken;
@@ -42,11 +46,16 @@ class UserController extends Controller
         }
 
         //login
+        if($query->isNotEmpty()){
         // $accessToken = auth()->user()->createToken('authToken')->accessToken;
-        $user = User::find(auth()->user()->id);
+        // $test= $query->keyBy('id')->json_decode();
+        $test= $query->toArray();
+        // return response(['message' => 'Login successfully', 'user' => $test[0]->id]);
+        $user = User::find($test[0]->id);
         $user->status = 'online';
         $user->update();
-        return response(['message' => 'Login successfully', 'user' => auth()->user(), 'access_token' => $user->access_token]);
+        return response(['message' => 'Login successfully', 'user' => $user, 'access_token' => $user->access_token]);
+        }
     }
 
     public function logout(Request $request)
