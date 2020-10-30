@@ -39,16 +39,14 @@ class UserController extends Controller
             $user->access_token = $accessToken;
             $user->update();
             return response(['message' => 'Register successfully', 'user' => $user, 'access_token' => $accessToken]);
-        }else{
-            //login
+        }
+
+        //login
         // $accessToken = auth()->user()->createToken('authToken')->accessToken;
         $user = User::find(auth()->user()->id);
         $user->status = 'online';
         $user->update();
         return response(['message' => 'Login successfully', 'user' => auth()->user(), 'access_token' => $user->access_token]);
-        }
-
-        
     }
 
     public function logout(Request $request)
