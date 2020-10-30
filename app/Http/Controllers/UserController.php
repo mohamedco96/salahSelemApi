@@ -47,6 +47,7 @@ class UserController extends Controller
 
         //login
         if($query->isNotEmpty()){
+            $iscomplete='true';
         // $accessToken = auth()->user()->createToken('authToken')->accessToken;
         // $test= $query->keyBy('id')->json_decode();
         $test= $query->toArray();
@@ -54,7 +55,10 @@ class UserController extends Controller
         $user = User::find($test[0]->id);
         $user->status = 'online';
         $user->update();
-        return response(['message' => 'Login successfully', 'user' => $user, 'access_token' => $user->access_token]);
+        if($test[0]->training_type==null){
+            $iscomplete='false';
+        }
+        return response(['message' => 'Login successfully', 'iscomplete' => $iscomplete, 'user' => $user, 'access_token' => $user->access_token]);
         }
     }
 
