@@ -3,10 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Video;
-use App\Models\Favorite;
-use App\Models\Article;
-
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
@@ -31,7 +27,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
-        
+
         $query = DB::table('users')
         ->where('users.social_id', '=', $request->social_id)
         ->get();
@@ -55,7 +51,7 @@ class UserController extends Controller
         $user = User::find($test[0]->id);
         $user->status = 'online';
         $user->update();
-        if($test[0]->training_type==null){
+        if($test[0]->tag==null){
             $iscomplete='false';
         }
         return response(['message' => 'Login successfully', 'iscomplete' => $iscomplete, 'user' => $user, 'access_token' => $user->access_token]);
@@ -74,6 +70,7 @@ class UserController extends Controller
             return "User is not logged in.";
         }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -239,7 +236,7 @@ class UserController extends Controller
                 ->get();
 
             $recipes = DB::table('users')
-                ->join('favorites', 'users.id', '=', 'favorites.user_id')
+        ->join('favorites', 'users.id', '=', 'favorites.user_id')
                 ->join('recipes', 'favorites.favoritable_id', '=', 'recipes.id')
                 ->where('favorites.favoritable_type', '=', 'App\Models\Recipes')
                 ->where('users.id', '=', $userInfo->id)

@@ -71,11 +71,24 @@ class VideoController extends Controller
         
         if ($vid) {
             $query = DB::table('videos')
+            ->join('videocategoriespivots', 'videos.id', '=', 'videocategoriespivots.video_id')
+            ->join('video_type_pivots', 'videos.id', '=', 'video_type_pivots.video_id')
+            ->join('video_tag_pivots', 'videos.id', '=', 'video_tag_pivots.video_id')
+            ->join('muscle_pivots', 'videos.id', '=', 'muscle_pivots.video_id')
             ->join('favorites', 'videos.id', '=', 'favorites.favoritable_id')
-            ->where('favorites.favoritable_id', '=', $id)
+
+            ->join('video_catagories', 'video_catagories.id', '=', 'videocategoriespivots.video_catagory_id')
+            ->join('video_types', 'video_types.id', '=', 'video_type_pivots.video_type_id')
+            ->join('video_tags', 'video_tags.id', '=', 'video_tag_pivots.video_tag_id')
+            ->join('muscles', 'muscles.id', '=', 'muscle_pivots.muscle_id')
+
+            ->where('videos.id', '=', $id)
+
+            // ->where('favorites.favoritable_id', '=', $id)
             ->where('favorites.favoritable_type', '=', 'App\Models\Video')
             ->where('favorites.user_id', '=', $userInfo->id)
-            ->select('videos.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->select('videos.*', 'video_catagories.name AS categorie_name', 'video_types.name AS type_name', 'video_tags.name AS tag_name', 'muscles.name AS muscle_name')
+            // ->select('videos.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
             ->groupBy('videos.id')->get(); 
             
             if($query->isNotEmpty()){
