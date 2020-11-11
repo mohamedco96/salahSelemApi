@@ -44,17 +44,18 @@ class UserController extends Controller
         //login
         if($query->isNotEmpty()){
             $iscomplete='true';
-        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
         // $test= $query->keyBy('id')->json_decode();
         $test= $query->toArray();
         // return response(['message' => 'Login successfully', 'user' => $test[0]->id]);
         $user = User::find($test[0]->id);
+        $accessToken = $user->createToken('authToken')->accessToken;
+        // $accessToken = auth()->user()->createToken('authToken')->accessToken;
         $user->status = 'online';
         $user->update();
         if($test[0]->tag==null){
             $iscomplete='false';
         }
-        return response(['message' => 'Login successfully', 'iscomplete' => $iscomplete, 'user' => $user, 'access_token' => $user->access_token]);
+        return response(['message' => 'Login successfully', 'iscomplete' => $iscomplete, 'user' => $user, 'access_token' => $accessToken ]);
         }
     }
 
