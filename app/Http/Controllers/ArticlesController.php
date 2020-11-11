@@ -26,7 +26,7 @@ class ArticlesController extends Controller
         $isfavorite;
         $userInfo = auth('api')->user();
         
-            $query = DB::table('articles')
+        $query = DB::table('articles')
             ->join('articles_catagory_pivots', 'articles.id', '=', 'articles_catagory_pivots.article_id')
             ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id')
 

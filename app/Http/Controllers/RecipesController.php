@@ -15,23 +15,53 @@ use Illuminate\Support\Facades\DB;
 class RecipesController extends Controller
 {
 
-
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        $isfavorite;
+        $userInfo = auth('api')->user();
+        
+        $query = DB::table('recipes')
+            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id')
 
-        $rec = QueryBuilder::for(Recipes::class)
-            ->allowedFilters([
-                'title',
-            ])
-            ->paginate()
-            ->appends(request()->query());
+            ->join('recipes_catagories', 'recipes_catagories.id', '=', 'recipes_category_pivots.recipes_catagory_id')
 
-        return RecipesResource::collection($rec);
+        
+            // ->join('favorites', 'articles.id', '=', 'favorites.favoritable_id')
+
+            // ->where('favorites.favoritable_id', '=', $id)
+            // ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+            // ->where('favorites.user_id', '=', $userInfo->id)
+
+            // ->select('articles.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->select('recipes.*', 'recipes_catagories.name AS categorie_name')
+            ->groupBy('recipes.id')
+            // ->orderBy('created_at', 'desc')
+            ->get();
+
+                        
+            if($query->isNotEmpty()){
+                return response([ 'Recipes' => new RecipesResource($query)], 200);
+            }
+            
+            return response(['isfavorite' => $isfavorite='false', 'Article' => new ArticlesResource($Article)], 200);
+
+        // $userInfo = auth('api')->user();
+
+        // $art = QueryBuilder::for(Article::class)
+        //     ->allowedFilters([
+        //         'title',
+        //         AllowedFilter::exact('author'),
+        //     ])
+        //     ->allowedSorts('created_at')
+        //     ->paginate()
+        //     ->appends(request()->query());
+
+        // return ArticlesResource::collection($art);
     }
 
     /**
@@ -66,7 +96,7 @@ class RecipesController extends Controller
         return response(['message' => 'Created Recipes successfully', 'Recipes' => new RecipesResource($rec)], 200);
     }
 
-    /**
+ /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -76,24 +106,27 @@ class RecipesController extends Controller
     {
         $isfavorite;
         $userInfo = auth('api')->user();
-        $rec = Recipes::find($id);
+        $Recipes = Recipes::find($id);
         
-        if ($rec) {
+        if ($Recipes) {
             $query = DB::table('recipes')
-            ->join('favorites', 'recipes.id', '=', 'favorites.favoritable_id')
-            ->where('favorites.favoritable_id', '=', $id)
-            ->where('favorites.favoritable_type', '=', 'App\Models\Video')
-            ->where('favorites.user_id', '=', $userInfo->id)
-            ->select('recipes.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
-            ->groupBy('recipes.id')->get(); 
-            
+            ->join('recipes_category_pivots', 'recipes.id', '=', 'recipes_category_pivots.recipes_id')
+
+            ->join('recipes_catagories', 'recipes_catagories.id', '=', 'recipes_category_pivots.recipes_catagory_id')
+
+            ->where('recipes.id', '=', $id)
+
+            ->select('recipes.*', 'recipes_catagories.name AS categorie_name')
+            ->groupBy('recipes.id')->get();
+
+                        
             if($query->isNotEmpty()){
-                return response(['isfavorite' => $isfavorite='true', 'Recipes' => new RecipesResource($query)], 200);
+                return response([ 'Recipes' => new RecipesResource($query)], 200);
             }
             
-            return response(['isfavorite' => $isfavorite='false', 'Recipes' => new RecipesResource($rec)], 200);
+            return response(['isfavorite' => $isfavorite='false', 'Article' => new RecipesResource($Article)], 200);
         }
-        return "Recipes Not found";;
+        return "Article Not found";
     }
 
     /**
