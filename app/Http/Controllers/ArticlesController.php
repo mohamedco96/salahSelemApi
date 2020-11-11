@@ -23,18 +23,48 @@ class ArticlesController extends Controller
      */
     public function index()
     {
+        $isfavorite;
         $userInfo = auth('api')->user();
+        
+            $query = DB::table('articles')
+            ->join('articles_catagory_pivots', 'articles.id', '=', 'articles_catagory_pivots.article_id')
+            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id')
 
-        $art = QueryBuilder::for(Article::class)
-            ->allowedFilters([
-                'title',
-                AllowedFilter::exact('author'),
-            ])
-            ->allowedSorts('created_at')
-            ->paginate()
-            ->appends(request()->query());
+            ->join('articles_catagories', 'articles_catagories.id', '=', 'articles_catagory_pivots.articles_catagory_id')
+            ->join('article_tags', 'article_tags.id', '=', 'article_tag_pivots.article_tag_id')
 
-        return ArticlesResource::collection($art);
+        
+            // ->join('favorites', 'articles.id', '=', 'favorites.favoritable_id')
+
+            // ->where('favorites.favoritable_id', '=', $id)
+            // ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+            // ->where('favorites.user_id', '=', $userInfo->id)
+
+            // ->select('articles.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->select('articles.*', 'articles_catagories.name AS categorie_name', 'article_tags.name AS tag_name')
+            ->groupBy('articles.id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+                        
+            if($query->isNotEmpty()){
+                return response([ 'Article' => new ArticlesResource($query)], 200);
+            }
+            
+            return response(['isfavorite' => $isfavorite='false', 'Article' => new ArticlesResource($Article)], 200);
+
+        // $userInfo = auth('api')->user();
+
+        // $art = QueryBuilder::for(Article::class)
+        //     ->allowedFilters([
+        //         'title',
+        //         AllowedFilter::exact('author'),
+        //     ])
+        //     ->allowedSorts('created_at')
+        //     ->paginate()
+        //     ->appends(request()->query());
+
+        // return ArticlesResource::collection($art);
     }
 
     /**
@@ -77,15 +107,28 @@ class ArticlesController extends Controller
         
         if ($Article) {
             $query = DB::table('articles')
-            ->join('favorites', 'articles.id', '=', 'favorites.favoritable_id')
-            ->where('favorites.favoritable_id', '=', $id)
-            ->where('favorites.favoritable_type', '=', 'App\Models\Article')
-            ->where('favorites.user_id', '=', $userInfo->id)
-            ->select('articles.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
-            ->groupBy('articles.id')->get(); 
-            
+            ->join('articles_catagory_pivots', 'articles.id', '=', 'articles_catagory_pivots.article_id')
+            ->join('article_tag_pivots', 'articles.id', '=', 'article_tag_pivots.article_id')
+
+            ->join('articles_catagories', 'articles_catagories.id', '=', 'articles_catagory_pivots.articles_catagory_id')
+            ->join('article_tags', 'article_tags.id', '=', 'article_tag_pivots.article_tag_id')
+
+            ->where('articles.id', '=', $id)
+
+        
+            // ->join('favorites', 'articles.id', '=', 'favorites.favoritable_id')
+
+            // ->where('favorites.favoritable_id', '=', $id)
+            // ->where('favorites.favoritable_type', '=', 'App\Models\Article')
+            // ->where('favorites.user_id', '=', $userInfo->id)
+
+            // ->select('articles.*', 'favorites.id AS favorites.id', 'favoritable_type','user_id')
+            ->select('articles.*', 'articles_catagories.name AS categorie_name', 'article_tags.name AS tag_name')
+            ->groupBy('articles.id')->get();
+
+                        
             if($query->isNotEmpty()){
-                return response(['isfavorite' => $isfavorite='true', 'Article' => new ArticlesResource($query)], 200);
+                return response([ 'Article' => new ArticlesResource($query)], 200);
             }
             
             return response(['isfavorite' => $isfavorite='false', 'Article' => new ArticlesResource($Article)], 200);
