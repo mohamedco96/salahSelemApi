@@ -35,13 +35,23 @@ use App\Http\Controllers\promocodeController;
     Route::post('/v1/auth', [UserController::class, 'auth']);
     Route::post('/v1/logout', [UserController::class, 'logout']);
     Route::post('/v1/userfavorites', [UserController::class, 'userFavorites']);
-    Route::apiResource('/v1/user', UserController::class)->middleware('auth:api');
+
+    // Route::apiResource('/v1/user', UserController::class)->middleware('auth:api');
+
     Route::post('/v1/user/addinteresteds', [UserController::class, 'AddInteresteds']);
     Route::post('/v1/user/updateinteresteds', [UserController::class, 'UpdateInteresteds']);
     Route::post('/v1/user/deleteinteresteds', [UserController::class, 'DeleteInteresteds']);
     Route::post('/v1/user/showinteresteds', [UserController::class, 'ShowInteresteds']);
 
     Route::post('/v1/user/findAccessToken', [UserController::class, 'findAccessToken']);
+
+    Route::post('/v1/user', [UserController::class, 'store'])->middleware('auth:api');
+    Route::get('/v1/users', [UserController::class, 'index'])->middleware('auth:api');
+    Route::get('/v1/user', [UserController::class, 'show'])->middleware('auth:api');
+    Route::put('/v1/user', [UserController::class, 'update'])->middleware('auth:api');
+    Route::post('/v1/deluser', [UserController::class, 'destroy'])->middleware('auth:api');
+
+
 
 /*************************************************************************************************************************/
 
@@ -61,7 +71,7 @@ use App\Http\Controllers\promocodeController;
     Route::post('/v1/article/addtofavorites', [ArticlesController::class, 'addToFavorites']);
     Route::post('/v1/article/removefromfavorites', [ArticlesController::class, 'removeFromFavorites']);
     Route::post('/v1/article/articlefillter', [ArticlesController::class, 'articleFillter']);
-    Route::post('/v1/articleandrecipes', [ArticlesController::class, 'articleAndRecipes']);
+    Route::get('/v1/articleandrecipes', [ArticlesController::class, 'articleAndRecipes']);
 /*************************************************************************************************************************/
 
 /*************************************************************************************************************************/

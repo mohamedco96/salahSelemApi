@@ -81,37 +81,43 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        // $data['password'] = bcrypt($request->password);
-        $validator = Validator::make($data, [
-            'social_id' => 'required|unique:users',
-            'password' => 'required',
-            'role_id' => 'numeric',
-            'email' => 'email',
-            'age' => 'numeric',
-            'height' => 'numeric',
-            'weight' => 'numeric',
-            'neck_size' => 'numeric',
-            'waist_size' => 'numeric',
-            'hips' => 'numeric',
-            'days_of_training' => 'numeric',
-            'Water' => 'numeric',
-            'sleep_hours' => 'numeric',
-            'fat' => 'numeric',
-            'calorie' => 'numeric',
-            'protein' => 'numeric',
-            'volume' => 'numeric',
-        ]);
+        $userInfo = auth('api')->user();
+        if($userInfo->role_id=='1'){
+            $data = $request->all();
+            // $data['password'] = bcrypt($request->password);
+            $validator = Validator::make($data, [
+                'social_id' => 'required|unique:users',
+                'password' => 'required',
+                'role_id' => 'numeric',
+                'email' => 'email',
+                'age' => 'numeric',
+                'height' => 'numeric',
+                'weight' => 'numeric',
+                'neck_size' => 'numeric',
+                'waist_size' => 'numeric',
+                'hips' => 'numeric',
+                'days_of_training' => 'numeric',
+                'Water' => 'numeric',
+                'sleep_hours' => 'numeric',
+                'fat' => 'numeric',
+                'calorie' => 'numeric',
+                'protein' => 'numeric',
+                'volume' => 'numeric',
+            ]);
 
-        if ($validator->fails()) {
-            return response(['error' => $validator->errors(), 'Validation Error']);
+            if ($validator->fails()) {
+                return response(['error' => $validator->errors(), 'Validation Error']);
+            }
+
+            $User = User::create($data);
+            $accessToken = $User->createToken('authToken')->accessToken;
+            $User->access_token = $accessToken;
+            $User->update();
+            return response(['message' => 'Created User successfully', 'user' => new ApiResource($User), 'access_token' => $User->access_token], 200);
+        }else{
+            return "Action isn't allowed";
         }
-
-        $User = User::create($data);
-        $accessToken = $User->createToken('authToken')->accessToken;
-        $User->access_token = $accessToken;
-        $User->update();
-        return response(['message' => 'Created User successfully', 'user' => new ApiResource($User), 'access_token' => $User->access_token], 200);
+        
     }
 
 
@@ -122,7 +128,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = QueryBuilder::for(User::class)
+        $userInfo = auth('api')->user();
+        if($userInfo->role_id=='1'){
+            $user = QueryBuilder::for(User::class)
             ->allowedFilters([
                 'name',
                 'age',
@@ -135,32 +143,36 @@ class UserController extends Controller
             ->paginate()
             ->appends(request()->query());
 
-        return ApiResource::collection($user);
+            return ApiResource::collection($user);
+        }else{
+            return "Action isn't allowed";
+        }
+        
+      
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        $user = User::find($id);
+        $userInfo = auth('api')->user();
+        $user = User::find($userInfo->id);
         if ($user) {
             return new ApiResource($user);
         }
         return "user Not found";
     }
 
-    /**
+      /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
         $data = $request->all();
         // $data['password'] = bcrypt($request->password);
@@ -186,7 +198,9 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error']);
         }
-
+        $userInfo = auth('api')->user();
+        $user = User::find($userInfo->id);
+        // $user = User::findOrfail($id);
         $user->update($data);
 
         return response(['user' => new ApiResource($user), 'message' => 'Update User successfully'], 200);
@@ -195,17 +209,23 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $user = User::findOrfail($id);
-        if ($user->delete()) {
-            return response(['message' => 'User Deleted successfully']);
+        $userInfo = auth('api')->user();
+        if($userInfo->role_id=='1'){
+            $user = User::findOrfail($request->id);
+            if ($user->delete()) {
+                return response(['message' => 'User Deleted successfully']);
+            }
+            return response(['message' => 'Error while deleting']);
+            // return "Error while deleting";
+        }else{
+            return "Action isn't allowed";
         }
-        return response(['message' => 'Error while deleting']);
-        // return "Error while deleting";
+ 
     }
 
     /**
