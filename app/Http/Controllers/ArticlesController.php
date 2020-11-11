@@ -192,4 +192,21 @@ class ArticlesController extends Controller
 /****************************************************************************************************************/
         return new ArticlesResource($result);
     }
+
+
+        /**
+     * Remove the specified resource from storage.
+     * @return \Illuminate\Http\Response
+     */
+    public function articleAndRecipes(Request $request)
+    {
+
+        $articles = DB::table('articles')->groupBy('id')->get(); 
+
+        $recipes = DB::table('recipes')->groupBy('id')->get(); 
+
+        return response(['Articles' => new ArticlesResource($articles), 'Recipes' => new ArticlesResource($recipes)], 200);
+
+        // return new ArticlesResource($recipes);
+    }
 }

@@ -61,6 +61,7 @@ use App\Http\Controllers\promocodeController;
     Route::post('/v1/article/addtofavorites', [ArticlesController::class, 'addToFavorites']);
     Route::post('/v1/article/removefromfavorites', [ArticlesController::class, 'removeFromFavorites']);
     Route::post('/v1/article/articlefillter', [ArticlesController::class, 'articleFillter']);
+    Route::post('/v1/articleandrecipes', [ArticlesController::class, 'articleAndRecipes']);
 /*************************************************************************************************************************/
 
 /*************************************************************************************************************************/
